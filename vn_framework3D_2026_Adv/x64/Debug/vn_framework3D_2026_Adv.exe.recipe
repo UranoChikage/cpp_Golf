@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>C:\Users\urano_chikage\Documents\C++\vn_framework3D_2026_Adv\x64\Debug\vn_framework3D_2026_Adv.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>C:\Users\urano_chikage\Documents\C++\vn_framework3D_2026_Adv\vn_framework3D_2026_Adv\shader\postprocess\ps_copy.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\urano_chikage\Documents\C++\vn_framework3D_2026_Adv\vn_framework3D_2026_Adv\shader\postprocess\ps_gray.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\urano_chikage\Documents\C++\vn_framework3D_2026_Adv\vn_framework3D_2026_Adv\shader\postprocess\vs_copy.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\urano_chikage\Documents\C++\vn_framework3D_2026_Adv\vn_framework3D_2026_Adv\shader\postprocess\vs_gray.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\urano_chikage\Documents\C++\vn_framework3D_2026_Adv\vn_framework3D_2026_Adv\shader\ps_2d.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\urano_chikage\Documents\C++\vn_framework3D_2026_Adv\vn_framework3D_2026_Adv\shader\ps_3d.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\urano_chikage\Documents\C++\vn_framework3D_2026_Adv\vn_framework3D_2026_Adv\shader\ps_3d_line.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\urano_chikage\Documents\C++\vn_framework3D_2026_Adv\vn_framework3D_2026_Adv\shader\ps_3d_no_light.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\urano_chikage\Documents\C++\vn_framework3D_2026_Adv\vn_framework3D_2026_Adv\shader\vs_2d.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\urano_chikage\Documents\C++\vn_framework3D_2026_Adv\vn_framework3D_2026_Adv\shader\vs_3d.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\urano_chikage\Documents\C++\vn_framework3D_2026_Adv\vn_framework3D_2026_Adv\shader\vs_3d_line.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\urano_chikage\Documents\C++\vn_framework3D_2026_Adv\vn_framework3D_2026_Adv\shader\vs_3d_skin.cso</FullPath>
+    </ContentFile>
+  </ContentFiles>
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

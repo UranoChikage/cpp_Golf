@@ -1,0 +1,21 @@
+struct pixelIn
+{
+	float4 pos : SV_POSITION;
+	float2 tx0 : TEXCOORD0;
+};
+
+Texture2D tex : register( t0 );
+SamplerState smp : register( s0 );
+
+//float3 gray = float3(0.299, 0.587, 0.114);
+//D3D12 ERROR: ID3D12Device::CreateGraphicsPipelineState: Root Signature doesn't match Pixel Shader: Shader CBV descriptor range (BaseShaderRegister=0, NumDescriptors=1, RegisterSpace=0) is not fully bound in root signature
+
+float4 main(pixelIn IN) : SV_Target
+{
+	float4 color = tex.Sample(smp, IN.tx0);
+	color.xyz = dot(color.xyz, float3(0.299, 0.587, 0.114));
+	//color.xyz = dot(color.xyz, gray);
+	//color.xy += IN.tx0;
+	
+	return color;
+}

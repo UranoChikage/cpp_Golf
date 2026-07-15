@@ -1,0 +1,35 @@
+struct pixelIn
+{
+	float4 pos : SV_POSITION;
+	float4 col : COLOR0;
+	float2 tx0 : TEXCOORD0;
+};
+
+//マテリアル
+cbuffer MaterialBuffer : register(b1)
+{
+	float4		Diffuse;	//マテリアルの拡散色
+	float4		Ambient;	//マテリアルの環境色
+	float4		Specular;	//マテリアルの鏡面反射光
+    float4		TilingOffset;
+}
+
+Texture2D txDiffuse : register(t0);
+SamplerState samLinear : register(s0);
+
+float4 main(pixelIn IN) : SV_Target
+{
+	//マテリアル
+    float4 col = Diffuse;
+    col.xyz += Ambient.xyz;
+	
+	//カラーとテクスチャを乗算
+    float4 color = txDiffuse.Sample(samLinear, IN.tx0)*IN.col;
+    if (color.w < 0.01f)
+    {
+        discard;
+    }
+	color *= col;
+
+	return color;
+}

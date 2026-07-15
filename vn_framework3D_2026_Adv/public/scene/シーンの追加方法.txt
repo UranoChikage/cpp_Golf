@@ -1,0 +1,91 @@
+"SceneXXX"という新しいシーンをプロジェクトに追加する方法を説明します。
+(XXXは任意の名前)
+
+
+
+①ヘッダファイルを作る
+Visual Studioのソリューションエクスプローラーの"public/scene"フィルタを右クリックし、"追加=>新しい項目"を選択、"scene_xxx.h"というファイルを作成します。(作成するフォルダを間違えないように)
+もしくは、あらかじめ"public/scene"フォルダに"scene_xxx.h"というファイルを作成しておき、"追加=>既存の項目"を選択し、プロジェクトに追加します。
+
+ヘッダファイルに以下のクラス定義を記述します。
+※vnSceneクラスを継承するのを忘れないように。
+　同時に、初期化や処理など基本操作となる関数をオーバーライドします。
+　特に、初期化(initialize)や、終了(terminate)は純粋仮想関数なので、実装必須です。
+
+--------------------------------
+
+#pragma once
+
+class SceneXXX : public vnScene
+{
+public:
+	//初期化
+	bool initialize();
+	//終了
+	void terminate();
+	
+	//処理
+	void execute();
+	//描画
+	void render();
+};
+
+--------------------------------
+
+
+
+②ソースファイルを作る
+Visual Studioのソリューションエクスプローラーの"public/scene"フィルタを右クリックし、"追加=>新しい項目"を選択、"scene_xxx.cpp"というファイルを作成します。(作成するフォルダを間違えないように)
+もしくは、あらかじめ"public/scene"フォルダに"scene_xxx.cpp"というファイルを作成しておき、"追加=>既存の項目"を選択し、プロジェクトに追加します。
+
+ソースファイルに以下のプログラムを記述します。
+※execute, render各関数で基底クラスの関数を呼び出すのを忘れないように。
+
+--------------------------------
+
+#include "../../framework.h"
+#include "../../framework/vn_environment.h"
+
+//初期化関数
+bool SceneXXX::initialize()
+{
+	return true;
+}
+
+//終了関数
+void SceneXXX::terminate()
+{
+}
+
+//処理関数
+void SceneXXX::execute()
+{
+	vnScene::execute();
+}
+
+//描画関数
+void SceneXXX::render()
+{
+	vnScene::render();
+}
+
+--------------------------------
+
+
+
+③シーンテーブルへの登録
+"scene_table.h"を開き、シーンの種類を記述した列挙子(enum eSceneTable)を追加します。
+ファイルの最後で、①で作成したヘッダファイルをインクルードします。
+
+
+
+④シーン情報の追加
+"scene_table.cpp"を開き、各シーンの情報を記述した構造体配列の初期化部分に、作成したシーンの情報(名前となる文字列)を追記します。
+
+
+
+⑤シーン切り替え関数のケース文追加
+"scene_table.cpp"を開き、シーン切り替え関数(switchScene)の中にある、switch文のcaseブロックに、追加した列挙子と対応するクラスを作成プログラムを追加します。
+
+※caseのラベルにはenumのラベル、new演算子で作成するのはシーンクラスなので、間違えないように。
+
