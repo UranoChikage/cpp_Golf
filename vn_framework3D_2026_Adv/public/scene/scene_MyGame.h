@@ -1,18 +1,18 @@
-#pragma once
+ï»¿#pragma once
 
 class SceneMyGame : public vnScene
 {
 private:
 	vnModel* pBall;
 public:
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	bool initialize();
-	//I—¹
+	//çµ‚äº†
 	void terminate();
 
-	//ˆ—
+	//å‡¦ç†
 	void execute();
-	//•`‰æ
+	//æç”»
 	void render();
 };
 

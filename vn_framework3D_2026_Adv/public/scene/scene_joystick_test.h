@@ -1,6 +1,6 @@
-//--------------------------------------------------------------//
+ï»¿//--------------------------------------------------------------//
 //	"scene_joystick_test.h"										//
-//		ƒWƒ‡ƒCƒXƒeƒBƒbƒNƒeƒXƒg									//
+//		ã‚¸ãƒ§ã‚¤ã‚¹ãƒ†ã‚£ãƒƒã‚¯ãƒ†ã‚¹ãƒˆ									//
 //													2026/01/01	//
 //														Ichii	//
 //--------------------------------------------------------------//
@@ -9,8 +9,8 @@
 class SceneJoystickTest : public vnScene
 {
 private:
-	bool testXInput;				//DirectInput / XInput Ø‚è‘Ö‚¦
-	bool vibrate[XUSER_MAX_COUNT];	//XInput:U“®‚Ì‘€ì
+	bool testXInput;				//DirectInput / XInput åˆ‡ã‚Šæ›¿ãˆ
+	bool vibrate[XUSER_MAX_COUNT];	//XInput:æŒ¯å‹•ã®æ“ä½œ
 
 	void executeDInput();
 	void executeXInput();

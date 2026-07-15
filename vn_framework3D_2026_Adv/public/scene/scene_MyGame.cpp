@@ -1,8 +1,8 @@
-#include "../../framework.h"
+ï»¿#include "../../framework.h"
 #include "../../framework/vn_environment.h"
 
 #define DEDAULT_SLERP_RATE	(0.1f)
-//‰Šú‰»
+//åˆæœŸåŒ–
 bool SceneMyGame::initialize()
 {
 	pBall = new vnModel(L"data/model/primitive", L"cube_soft.vnm");
@@ -10,18 +10,18 @@ bool SceneMyGame::initialize()
 	vnCamera::setTarget(0.0f, 1.0f, 0.0f);
 	return true;
 }
-//I—¹
+//çµ‚äº†
 void SceneMyGame::terminate()
 {
 	deleteObject(pBall);
 }
 
-//ˆ—
+//å‡¦ç†
 void SceneMyGame::execute()
 {
 
 }
-//•`‰æ
+//æç”»
 void SceneMyGame::render()
 {
 

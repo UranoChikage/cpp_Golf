@@ -1,6 +1,6 @@
-//--------------------------------------------------------------//
+ï»¿//--------------------------------------------------------------//
 //	"scene_se_test.h"											//
-//		SEƒeƒXƒg												//
+//		SEãƒ†ã‚¹ãƒˆ												//
 //													2026/01/01	//
 //														Ichii	//
 //--------------------------------------------------------------//
@@ -27,7 +27,7 @@ WCHAR seFile[][FILE_PATH_MAX] =
 	L"data/sound/cancel1.wav",
 };
 
-//‰Šú‰»ŠÖ”
+//åˆæœŸåŒ–é–¢æ•°
 bool SceneSeTest::initialize()
 {
 	fileNum = sizeof(seFile)/(sizeof(WCHAR)*FILE_PATH_MAX);
@@ -40,7 +40,7 @@ bool SceneSeTest::initialize()
 	return true;
 }
 
-//I—¹ŠÖ”
+//çµ‚äº†é–¢æ•°
 void SceneSeTest::terminate()
 {
 	if (pSound != NULL)
@@ -56,7 +56,7 @@ void SceneSeTest::terminate()
 	}
 }
 
-//ˆ—ŠÖ”
+//å‡¦ç†é–¢æ•°
 void SceneSeTest::execute()
 {
 	if(vnMouse::trg())
@@ -115,18 +115,18 @@ void SceneSeTest::execute()
 		vnFont::print(400.0f, y, L"Play");
 		vnFont::print(450.0f, y, L"Stop");
 		
-		vnFont::print(660.0f, y, L"|");
+		vnFont::print(660.0f, y, L"ï¼");
 		vnFont::print(700.0f, y, L"%.3f", pSound[i]->getVolume());
-		vnFont::print(800.0f, y, L"{");
+		vnFont::print(800.0f, y, L"ï¼‹");
 
-		vnFont::print(960.0f, y, L"|");
+		vnFont::print(960.0f, y, L"ï¼");
 		vnFont::print(1000.0f, y, L"%.3f", pSound[i]->getFrequencyRatio());
-		vnFont::print(1100.0f, y, L"{");
+		vnFont::print(1100.0f, y, L"ï¼‹");
 	}
 	vnScene::execute();
 }
 
-//•`‰æŠÖ”
+//æç”»é–¢æ•°
 void SceneSeTest::render()
 {
 	vnScene::render();

@@ -1,6 +1,6 @@
-//--------------------------------------------------------------//
+ï»¿//--------------------------------------------------------------//
 //	"scene_joystick_test.cpp"									//
-//		ƒWƒ‡ƒCƒXƒeƒBƒbƒNƒeƒXƒg									//
+//		ã‚¸ãƒ§ã‚¤ã‚¹ãƒ†ã‚£ãƒƒã‚¯ãƒ†ã‚¹ãƒˆ									//
 //													2026/01/01	//
 //														Ichii	//
 //--------------------------------------------------------------//
@@ -9,7 +9,7 @@
 
 #define LINE_POS(y)	((float)(y)*16.0f+40.0f)
 
-//‰Šú‰»ŠÖ”
+//åˆæœŸåŒ–é–¢æ•°
 bool SceneJoystickTest::initialize()
 {
 	testXInput = false;
@@ -22,7 +22,7 @@ bool SceneJoystickTest::initialize()
 	return true;
 }
 
-//I—¹ŠÖ”
+//çµ‚äº†é–¢æ•°
 void SceneJoystickTest::terminate()
 {
 	for (int i = 0; i < XUSER_MAX_COUNT; i++)
@@ -32,7 +32,7 @@ void SceneJoystickTest::terminate()
 	vnFont::setColor(0xffffffff);
 }
 
-//ˆ—ŠÖ”
+//å‡¦ç†é–¢æ•°
 void SceneJoystickTest::execute()
 {
 	if (vnKeyboard::trg(DIK_F1))
@@ -164,7 +164,7 @@ void SceneJoystickTest::executeXInput()
 	vnFont::setColor(0xffffffff);
 }
 
-//•`‰æŠÖ”
+//æç”»é–¢æ•°
 void SceneJoystickTest::render()
 {
 	vnScene::render();
