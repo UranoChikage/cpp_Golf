@@ -103,6 +103,7 @@ using namespace DirectX;
 #include "../public/Collider.h"
 #include "../public/CollisionManager.h"
 #include "../public/MatrixMath.h"
+#include "../public/PhysicsBody.h"
 
 #include "../public/scene/vn_scene.h"
 #include "../public/scene/scene_table.h"

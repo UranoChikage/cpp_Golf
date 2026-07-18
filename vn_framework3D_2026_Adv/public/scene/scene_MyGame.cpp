@@ -85,7 +85,7 @@ void SceneMyGame::execute()
 	vnDebugDraw::Grid();
 	vnDebugDraw::Axis();
 
-	vnFont::print(20.0f, 0, L"青色の線はRay");
+	vnFont::print(20.0f, 0, L"赤色の線はRay");
 	DebugDrawResult(L"Box", 20.0f, boxRay, boxResult, boxHit, boxNor);
 	DebugDrawResult(L"Sphere", 40.0f, sphereRay, sphereResult, sphereHit, sphereNor);
 	DebugDrawResult(L"Mesh", 60.0f, meshRay, meshResult, meshHit, meshNor);
@@ -118,7 +118,7 @@ void SceneMyGame::updateCamera()
 		theta -= 1.0f;
 	}
 
-	//注視点(原点)からradius離れた位置を、theta/phiで回転させてカメラ座標を求める
+	//注視点からradiusぶん離れた位置を、theta/phiで回転させてカメラ座標を求める
 	XMVECTOR v = XMVectorSet(0.0f, 0.0f, -radius, 0.0f);
 	XMMATRIX rotate = MatrixMath::RotationX(phi) * MatrixMath::RotationY(theta);
 	v = MatrixMath::MultiplyVector(rotate, v);
@@ -133,7 +133,8 @@ void SceneMyGame::DebugDrawResult(const wchar_t* label, float y,
 	const vnCollide::stSegment& ray, bool result, const XMVECTOR& hit, const XMVECTOR& nor)
 {
 	XMVECTOR rayEnd = ray.Pos + ray.Dir * ray.Length;
-	vnDebugDraw::Line(&ray.Pos, &rayEnd, 0xffff0000); // 赤：Ray
+	//A,B,G,Rの順で指定できる
+	vnDebugDraw::Line(&ray.Pos, &rayEnd, 0xff0000ff); // 赤：Ray
 
 	if (result)
 	{
