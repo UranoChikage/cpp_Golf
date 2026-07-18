@@ -166,6 +166,55 @@ bool BoxCollider::IsCollide(const vnCollide::stSegment& ray, XMVECTOR* hit, XMVE
 
 	return true;
 }
+//2026/07/18　AIに手伝ってもらって追加
+namespace
+{
+	float ClampF(float v, float lo, float hi)
+	{
+		return (v < lo) ? lo : (v > hi ? hi : v);
+	}
+}
+
+//2026/07/18　AIに手伝ってもらって追加(QueryObstacle用のPhysics.OverlapSphere相当が無かったため)
+bool BoxCollider::Overlap(const XMVECTOR& sphereCenter, float sphereRadius,
+	XMVECTOR* outClosestPoint, XMVECTOR* outNormal, float* outPenetration)
+{
+	XMVECTOR closest;
+	if (IsAxisAligned())
+	{
+		float cx = ClampF(XMVectorGetX(sphereCenter), XMVectorGetX(min), XMVectorGetX(max));
+		float cy = ClampF(XMVectorGetY(sphereCenter), XMVectorGetY(min), XMVectorGetY(max));
+		float cz = ClampF(XMVectorGetZ(sphereCenter), XMVectorGetZ(min), XMVectorGetZ(max));
+		closest = XMVectorSet(cx, cy, cz, 0.0f);
+	}
+	else
+	{
+		//ワールド→ローカルに変換してクランプしてから、ワールドに戻す
+		XMMATRIX localMatrix = GetLocalMatrix();
+		XMVECTOR localCenter = MatrixMath::MultiplyPoint(localMatrix, sphereCenter);
+
+		float lx = ClampF(XMVectorGetX(localCenter), -XMVectorGetX(half), XMVectorGetX(half));
+		float ly = ClampF(XMVectorGetY(localCenter), -XMVectorGetY(half), XMVectorGetY(half));
+		float lz = ClampF(XMVectorGetZ(localCenter), -XMVectorGetZ(half), XMVectorGetZ(half));
+		XMVECTOR localClosest = XMVectorSet(lx, ly, lz, 0.0f);
+
+		//GetLocalMatrix()は「ワールド→ローカル」なので、その逆(ローカル→ワールド)は回転してから平行移動
+		XMMATRIX worldMatrix = rotate * MatrixMath::Translation(center);
+		closest = MatrixMath::MultiplyPoint(worldMatrix, localClosest);
+	}
+
+	XMVECTOR diff = sphereCenter - closest;
+	float dist = XMVectorGetX(XMVector3Length(diff));
+	if (dist > sphereRadius) return false; // 重なっていない
+
+	XMVECTOR normal = (dist > 0.0001f) ? diff / dist : XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+	if (outClosestPoint) *outClosestPoint = closest;
+	if (outNormal) *outNormal = normal;
+	if (outPenetration) *outPenetration = sphereRadius - dist;
+	return true;
+}
+
 bool BoxCollider::IsAxisAligned()
 {
 
@@ -229,6 +278,24 @@ bool SphereCollider::IsCollide(const vnCollide::stSegment& ray, XMVECTOR* hit, X
 	*nor = XMVector3Normalize(bestHit - center);
 	return true;
 }
+
+//AI
+bool SphereCollider::Overlap(const XMVECTOR& sphereCenter, float sphereRadius,
+	XMVECTOR* outClosestPoint, XMVECTOR* outNormal, float* outPenetration)
+{
+	XMVECTOR diff = sphereCenter - center;
+	float dist = XMVectorGetX(XMVector3Length(diff));
+	float sumRadius = sphereRadius + radius;
+	if (dist > sumRadius) return false; // 重なっていない
+
+	XMVECTOR normal = (dist > 0.0001f) ? diff / dist : XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMVECTOR closest = center + normal * radius;
+
+	if (outClosestPoint) *outClosestPoint = closest;
+	if (outNormal) *outNormal = normal;
+	if (outPenetration) *outPenetration = sumRadius - dist;
+	return true;
+}
 bool MeshCollider::IsCollide(const vnCollide::stSegment& ray, XMVECTOR* hit, XMVECTOR* nor)
 {
 	//stSegmentはPos,Dir(Normalize), Lengthを持つ
@@ -266,6 +333,93 @@ bool MeshCollider::IsCollide(const vnCollide::stSegment& ray, XMVECTOR* hit, XMV
 	*nor = bestNormal;
 	return true;
 }
+
+//AI 点から三角形への最近接点を求める処理。エッジや頂点にはみ出すケースも含めて場合分けする。
+// (ボロノイ領域分割法というやつ)
+namespace
+{
+	XMVECTOR ClosestPointOnTriangle(const XMVECTOR& p, const XMVECTOR& a, const XMVECTOR& b, const XMVECTOR& c)
+	{
+		XMVECTOR ab = b - a;
+		XMVECTOR ac = c - a;
+		XMVECTOR ap = p - a;
+
+		float d1 = MatrixMath::Dot(ab, ap);
+		float d2 = MatrixMath::Dot(ac, ap);
+		if (d1 <= 0.0f && d2 <= 0.0f) return a; // aが最近接
+
+		XMVECTOR bp = p - b;
+		float d3 = MatrixMath::Dot(ab, bp);
+		float d4 = MatrixMath::Dot(ac, bp);
+		if (d3 >= 0.0f && d4 <= d3) return b; // bが最近接
+
+		float vc = d1 * d4 - d3 * d2;
+		if (vc <= 0.0f && d1 >= 0.0f && d3 <= 0.0f)
+		{
+			float v = d1 / (d1 - d3);
+			return a + ab * v; // 辺ab上
+		}
+
+		XMVECTOR cp = p - c;
+		float d5 = MatrixMath::Dot(ab, cp);
+		float d6 = MatrixMath::Dot(ac, cp);
+		if (d6 >= 0.0f && d5 <= d6) return c; // cが最近接
+
+		float vb = d5 * d2 - d1 * d6;
+		if (vb <= 0.0f && d2 >= 0.0f && d6 <= 0.0f)
+		{
+			float w = d2 / (d2 - d6);
+			return a + ac * w; // 辺ac上
+		}
+
+		float va = d3 * d6 - d5 * d4;
+		if (va <= 0.0f && (d4 - d3) >= 0.0f && (d5 - d6) >= 0.0f)
+		{
+			float w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
+			return b + (c - b) * w; // 辺bc上
+		}
+
+		//面の内側
+		float denom = 1.0f / (va + vb + vc);
+		float v = vb * denom;
+		float w = vc * denom;
+		return a + ab * v + ac * w;
+	}
+}
+
+//AI 三角形を全部見て一番近い点との距離で重なりを判定してる
+bool MeshCollider::Overlap(const XMVECTOR& sphereCenter, float sphereRadius,
+	XMVECTOR* outClosestPoint, XMVECTOR* outNormal, float* outPenetration)
+{
+	float bestDist = FLT_MAX;
+	XMVECTOR bestPoint = XMVectorZero();
+	XMVECTOR bestNormal = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	bool found = false;
+
+	for (const auto& tri : Triangles)
+	{
+		XMVECTOR closest = ClosestPointOnTriangle(sphereCenter, tri.v[0], tri.v[1], tri.v[2]);
+		float dist = XMVectorGetX(XMVector3Length(sphereCenter - closest));
+		if (dist < bestDist)
+		{
+			bestDist = dist;
+			bestPoint = closest;
+			bestNormal = tri.plane.Normal;
+			found = true;
+		}
+	}
+
+	if (!found || bestDist > sphereRadius) return false; // 重なっている三角形がなかった
+
+	XMVECTOR diff = sphereCenter - bestPoint;
+	XMVECTOR normal = (bestDist > 0.0001f) ? diff / bestDist : bestNormal;
+
+	if (outClosestPoint) *outClosestPoint = bestPoint;
+	if (outNormal) *outNormal = normal;
+	if (outPenetration) *outPenetration = sphereRadius - bestDist;
+	return true;
+}
+
 std::vector<vnCollide::stTriangle> MeshCollider::BuildTriangles(vnModel* p)
 {
 	vnCollide::stTriangle tri;

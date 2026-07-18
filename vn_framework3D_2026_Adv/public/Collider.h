@@ -9,6 +9,15 @@ public:
 	virtual bool IsCollide(const vnCollide::stSegment& ray,
 		XMVECTOR* hit, XMVECTOR* nor) = 0; // 中身は各形状が実装する
 
+	//2026/07/18　AIに手伝ってもらって追加(QueryObstacle用のPhysics.OverlapSphere相当が無かったため)
+	//球との重なり判定(Physics.OverlapSphere相当)
+	//[return] bool true : 重なっている, false : 重なっていない
+	//[out]outClosestPoint : 形状上の最近接点
+	//[out]outNormal : sphereCenterから見た押し出し方向の法線
+	//[out]outPenetration : めり込み量
+	virtual bool Overlap(const XMVECTOR& sphereCenter, float sphereRadius,
+		XMVECTOR* outClosestPoint, XMVECTOR* outNormal, float* outPenetration) = 0;
+
 	virtual ~Collider();
 };
 
@@ -36,6 +45,9 @@ public:
 	bool IsAxisAligned();
 	bool IsCollide(const vnCollide::stSegment& ray,
 		XMVECTOR* hit, XMVECTOR* nor) override;
+	//2026/07/18　AIに手伝ってもらって追加
+	bool Overlap(const XMVECTOR& sphereCenter, float sphereRadius,
+		XMVECTOR* outClosestPoint, XMVECTOR* outNormal, float* outPenetration) override;
 };
 class SphereCollider : public Collider
 {
@@ -59,6 +71,9 @@ public:
 	}
 	bool IsCollide(const vnCollide::stSegment& ray,
 		XMVECTOR* hit, XMVECTOR* nor) override;
+	//2026/07/18　AIに手伝ってもらって追加
+	bool Overlap(const XMVECTOR& sphereCenter, float sphereRadius,
+		XMVECTOR* outClosestPoint, XMVECTOR* outNormal, float* outPenetration) override;
 };
 class MeshCollider : public Collider
 {
@@ -71,4 +86,7 @@ public:
 	static std::vector<vnCollide::stTriangle> BuildTriangles(vnModel* p);
 	bool IsCollide(const vnCollide::stSegment& ray,
 		XMVECTOR* hit, XMVECTOR* nor) override;
+	//2026/07/18　AIに手伝ってもらって追加
+	bool Overlap(const XMVECTOR& sphereCenter, float sphereRadius,
+		XMVECTOR* outClosestPoint, XMVECTOR* outNormal, float* outPenetration) override;
 };
