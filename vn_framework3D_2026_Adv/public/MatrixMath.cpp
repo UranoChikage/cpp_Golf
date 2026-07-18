@@ -155,7 +155,6 @@ float MatrixMath::Dot(const XMVECTOR& a, const XMVECTOR& b)
 {
 	return XMVectorGetX(XMVector3Dot(a, b));
 }
-
 XMMATRIX MatrixMath::Transpose(const XMMATRIX& m)
 {
 	XMMATRIX result;

@@ -8,6 +8,7 @@ public:
 
 	virtual bool IsCollide(const vnCollide::stSegment& ray,
 		XMVECTOR* hit, XMVECTOR* nor) = 0; // 中身は各形状が実装する
+
 	virtual ~Collider();
 };
 
@@ -18,6 +19,7 @@ private:
 	XMVECTOR min, max;
 	XMMATRIX rotate;//回転行列(単位行列ならAABBで計算可能)※scaleは考慮しない
 
+	XMMATRIX GetLocalMatrix();
 	//2026/07/02　一旦回転考慮せずいくぜ！
 	//2026/07/13　world座標からlocal座標に変換してからAABBの衝突判定を行うようにする！先生がヒントをくれた！
 	//AABB
@@ -63,6 +65,10 @@ class MeshCollider : public Collider
 private:
 	std::vector<vnCollide::stTriangle> Triangles; // 頂点のリスト
 public:
+	MeshCollider(const std::vector<vnCollide::stTriangle>& triangles)
+		: Triangles(triangles) {
+	}
+	static std::vector<vnCollide::stTriangle> BuildTriangles(vnModel* p);
 	bool IsCollide(const vnCollide::stSegment& ray,
 		XMVECTOR* hit, XMVECTOR* nor) override;
 };

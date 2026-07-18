@@ -1,12 +1,12 @@
 //--------------------------------------------------------------//
 //	"vn_environment.h"											//
-//		ƒtƒŒ[ƒ€ƒ[ƒN‹¤’ÊŠÂ‹«ƒwƒbƒ_[							//
+//		ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½Nï¿½ï¿½ï¿½ÊŠÂ‹ï¿½ï¿½wï¿½bï¿½_ï¿½[							//
 //													2026/01/01	//
 //														Ichii	//
 //--------------------------------------------------------------//
 #pragma once
 
-//ƒ‰ƒCƒuƒ‰ƒŠ
+//ï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxguid.lib")
@@ -37,14 +37,14 @@
 
 #endif
 
-//‹¤’Êƒwƒbƒ_ƒtƒ@ƒCƒ‹‚ÌƒCƒ“ƒNƒ‹[ƒh
+//ï¿½ï¿½ï¿½Êƒwï¿½bï¿½_ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½h
 #include <stdio.h>
 #include <assert.h>
 #include <mmsystem.h>
 #include <locale.h>
 #include <time.h>
 
-//DirectXƒwƒbƒ_[
+//DirectXï¿½wï¿½bï¿½_ï¿½[
 #include <d2d1_3.h>
 #include <dwrite.h>
 #include <d3d11on12.h>
@@ -60,17 +60,17 @@
 
 #include "../DirectXTex/DirectXTex.h"
 
-//ƒl[ƒ€ƒXƒy[ƒX
+//ï¿½lï¿½[ï¿½ï¿½ï¿½Xï¿½yï¿½[ï¿½X
 using namespace DirectX;
 
-//ˆê”Êƒ}ƒNƒ
-#define SCREEN_WIDTH	(1280)	//ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚Ì•(ƒsƒNƒZƒ‹)
-#define SCREEN_HEIGHT	(720)	//ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚Ì‚‚³(ƒsƒNƒZƒ‹)
+//ï¿½ï¿½Êƒ}ï¿½Nï¿½ï¿½
+#define SCREEN_WIDTH	(1280)	//ï¿½Nï¿½ï¿½ï¿½Cï¿½Aï¿½ï¿½ï¿½gï¿½Ìˆï¿½Ì•ï¿½(ï¿½sï¿½Nï¿½Zï¿½ï¿½)
+#define SCREEN_HEIGHT	(720)	//ï¿½Nï¿½ï¿½ï¿½Cï¿½Aï¿½ï¿½ï¿½gï¿½Ìˆï¿½Ìï¿½ï¿½ï¿½(ï¿½sï¿½Nï¿½Zï¿½ï¿½)
 
-//ƒŠƒŠ[ƒX
+//ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½X
 #define SAFE_RELEASE(p) {if(p){(p)->Release();(p)=NULL;}}
 
-//ƒtƒŒ[ƒ€ƒ[ƒNƒwƒbƒ_[
+//ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½Nï¿½wï¿½bï¿½_ï¿½[
 #include "directX/vn_shader.h"
 #include "directX/vn_Direct3D.h"
 #include "directX/vn_Direct2D.h"
@@ -97,14 +97,15 @@ using namespace DirectX;
 #include "../public/vn_sprite.h"
 #include "../public/vn_collide.h"
 
-#include "../public/scene/vn_scene.h"
-#include "../public/scene/scene_table.h"
 #include "../public/IHitReceiver.h"
 #include "../public/Contact.h"
 #include "../public/ICollisionShape.h"
 #include "../public/Collider.h"
 #include "../public/CollisionManager.h"
 #include "../public/MatrixMath.h"
+
+#include "../public/scene/vn_scene.h"
+#include "../public/scene/scene_table.h"
 
 
 #include "vn_mainframe.h"

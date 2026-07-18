@@ -107,7 +107,12 @@ public:
 	// limitAngle: 回転可能な最大傾斜角度（例: 45度 を渡す）
 	static bool IsWall(XMVECTOR groundNormal, float limitAngle);
 
-	//転置行列を返す関数。列を行に、行を列に入れ替えるとなんかできるらしい。キーワード：「転置/直交行列」
+	//転置行列を返す関数。列を行に、行を列に入れ替えるとなんかできるらしい。
+	// キーワード：「転置/直交行列」
+
+	/// <summary>
+	/// 行列の転置を計算します。
+	/// </summary>
 	static XMMATRIX Transpose(const XMMATRIX& m);
 
 	static float Dot(const XMVECTOR& a, const XMVECTOR& b);

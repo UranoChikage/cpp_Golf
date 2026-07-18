@@ -3,7 +3,31 @@
 class SceneMyGame : public vnScene
 {
 private:
-	vnModel* pBall;
+	//=== Box ===
+	vnModel* pBoxModel;
+	BoxCollider* pBoxCollider;
+	vnCollide::stSegment boxRay;
+
+	//=== Sphere ===
+	vnModel* pSphereModel;
+	SphereCollider* pSphereCollider;
+	vnCollide::stSegment sphereRay;
+
+	//=== Mesh ===
+	vnModel* pMeshModel;
+	MeshCollider* pMeshCollider;
+	vnCollide::stSegment meshRay;
+
+	CollisionManager* pCollisionManager;
+
+	//=== カメラ(注視点を中心にオービット) ===
+	float radius;
+	float theta;
+	float phi;
+	void updateCamera();
+
+	void DebugDrawResult(const wchar_t* label, float y,
+		const vnCollide::stSegment& ray, bool result, const XMVECTOR& hit, const XMVECTOR& nor);
 public:
 	//初期化
 	bool initialize();
