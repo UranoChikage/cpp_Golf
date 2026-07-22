@@ -20,5 +20,5 @@ public:
 	XMFLOAT3 normal{};
 	float penetration = 0.0f; // めり込み量
 	IHitReceiver* hit = nullptr;
-	bool isTigger = false;
+	bool isTrigger = false;
 };

@@ -12,10 +12,12 @@ bool SceneMyGame::initialize()
 	//=== Box (x=-3) ===
 	pBoxModel = new vnModel(L"data/model/primitive/", L"cube_soft.vnm");
 	pBoxModel->setPosition(-3.0f, 0.0f, 0.0f);
-	pBoxModel->setScale(1.0f, 1.0f, 1.0f);
+	pBoxModel->setScale(1.0f, 1.0f, 3.0f);
+	//pBoxModel->setRotationZ(45);
 	registerObject(pBoxModel);
 
-	pBoxCollider = new BoxCollider(*pBoxModel->getPosition(), *pBoxModel->getScale() * 0.5f);
+	pBoxCollider = new BoxCollider(*pBoxModel->getPosition(), *pBoxModel->getScale() * 1.0f);
+	//pBoxCollider->SetRotate(*pBoxModel->getRotation());
 	pObstacleManager->Add(pBoxCollider);
 
 	{
@@ -67,7 +69,7 @@ bool SceneMyGame::initialize()
 
 	//=== Ball===
 	pBall = BallsManager::GetInstance().AddBall(0, 1.0f, pTerrainManager, pObstacleManager);
-	pBall->GetPhysicsBody()->setPosition(0.5f, 3.0f, 0.0f);
+	pBall->GetPhysicsBody()->setPosition(-0.5f, 3.0f, 0.0f);
 
 	pBallModel = new vnModel(L"data/model/primitive/", L"sphere.vnm");
 	pBallModel->setScale(1.0f, 1.0f, 1.0f);

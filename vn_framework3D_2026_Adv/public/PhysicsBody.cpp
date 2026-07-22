@@ -47,6 +47,16 @@ void PhysicsBody::Step(float deltaTime)
 	}
 	//跳ね返り処理＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
+
+	/*
+	* 2026/07/20　問題発生明日やる
+	* なぜか障害物の側面の挙動が変、めり込んでってしまう
+	* 
+	* 2026/07/21　解決できた～
+	* 壁(IsWall=true)の場合だけ毎フレームの押し出し(pos += oNormal * penetration)が
+	* 丸ごとスキップされる書き方になっていたのが原因でした。床判定(isGrounded)の方だけ
+	* 条件分岐で絞ればよかったのに、押し出し自体もその中に巻き込まれてしまっていた
+	*/
 	//障害物
 	XMStoreFloat3(&posF3, pos);
 	std::vector<Contact> obstacle;
@@ -58,13 +68,13 @@ void PhysicsBody::Step(float deltaTime)
 		for (auto& o : obstacle)
 		{
 			XMVECTOR oNormal = XMLoadFloat3(&o.normal);
-			if (!MatrixMath::IsWall(oNormal, 30.0f)) //ひとまず30°以上が跳ねっかえる障害物
+			if (!o.isTrigger)
 			{
-				if (!o.isTigger)
+				if (!MatrixMath::IsWall(oNormal, 30.0f)) //ひとまず30°以上が跳ねっかえる障害物
 				{
 					isGrounded |= wasObstaclrHit; //障害物に当たってもほぼ床みたいなもんなので接地ということに
-					pos += oNormal * o.penetration;
 				}
+				pos += oNormal * o.penetration; //壁でも毎フレームめり込みを解消する
 			}
 		}
 		isObstaclehit = true;
@@ -98,7 +108,7 @@ void PhysicsBody::Step(float deltaTime)
 		{
 			if (o.hit != nullptr) o.hit->OnHit(owner, pos);
 
-			if (!o.isTigger)
+			if (!o.isTrigger)
 			{
 				XMVECTOR oNormal = XMLoadFloat3(&o.normal);
 				ApplyBounce(oNormal);
