@@ -65,8 +65,8 @@ bool SceneMyGame::initialize()
 	pGroundCollider = new MeshCollider(MeshCollider::BuildTriangles(pGroundModel));
 	pTerrainManager->Add(pGroundCollider);
 
-	//=== Ball(仮テスト用) ===
-	pBall = new Ball(1.0f, pTerrainManager, pObstacleManager);
+	//=== Ball===
+	pBall = BallsManager::GetInstance().AddBall(0, 1.0f, pTerrainManager, pObstacleManager);
 	pBall->GetPhysicsBody()->setPosition(0.5f, 3.0f, 0.0f);
 
 	pBallModel = new vnModel(L"data/model/primitive/", L"sphere.vnm");
@@ -89,7 +89,7 @@ void SceneMyGame::terminate()
 	deleteObject(pGroundModel);
 	delete pTerrainManager;
 	delete pObstacleManager;
-	delete pBall;
+	BallsManager::GetInstance().RemoveBall(0);
 }
 
 //処理

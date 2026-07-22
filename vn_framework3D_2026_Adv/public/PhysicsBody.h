@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include <functional>
 
+class IBall;//前方宣言
+
 /***************************************************************
  * 2026/07/17
  * クラス名：PhysicsBody
@@ -14,7 +16,7 @@ enum class ForceMode
 	Impulse,
 	VelocityChange,
 };
-
+//物理パラメーターはこのクラスでのみ変更可能
 class PhysicsBody : public vnObject
 {
 private:
@@ -24,11 +26,13 @@ private:
 	float bounciness = 0.15f; // 反発係数
 
 	//停止判定パラメーター
-	float timeOut = 0.5f;
-	float minMagnitude = 0.1f; // 動きが止まったとみなす速度の閾値
-	float velocityChangeThreshold = 0.5f; // 速度の変化がこの値以下なら停止とみなす
+	float timeOut = 3;
+	float minMagnitude = 0.06f; // 動きが止まったとみなす速度の閾値
+	float velocityChangeThreshold = 0.1f; // 速度の変化がこの値以下なら停止とみなす
 
 	ICollisionShape* collisionShape = nullptr;
+
+	IBall* owner = nullptr;//このPhysicsBodyを持っているBall
 
 	// 内部状態
 	XMVECTOR velocity = XMVectorZero(); // 現在の速度
@@ -47,6 +51,9 @@ public:
 
 	//衝突判定対象の形状を設定
 	void SetCollisionShape(ICollisionShape* shape);
+
+	//このPhysicsBodyを持っているBallを設定
+	void SetOwner(IBall* value) { owner = value; }
 
 	//状態
 	bool GetIsMoving() const { return isMoving; }

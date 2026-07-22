@@ -96,7 +96,7 @@ void PhysicsBody::Step(float deltaTime)
 	{
 		for (auto& o : obstacle)
 		{
-			if (o.hit != nullptr) o.hit->OnHit(pos);
+			if (o.hit != nullptr) o.hit->OnHit(owner, pos);
 
 			if (!o.isTigger)
 			{

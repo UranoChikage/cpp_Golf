@@ -147,11 +147,13 @@
     <ClInclude Include="public\Collider.h" />
     <ClInclude Include="public\CollisionManager.h" />
     <ClInclude Include="public\Contact.h" />
+    <ClInclude Include="public\HoleBase.h" />
     <ClInclude Include="public\IBall.h" />
     <ClInclude Include="public\ICollisionShape.h" />
     <ClInclude Include="public\IHitReceiver.h" />
     <ClInclude Include="public\MatrixMath.h" />
     <ClInclude Include="public\PhysicsBody.h" />
+    <ClInclude Include="public\PlayerScore.h" />
     <ClInclude Include="public\scene\scene_boot.h" />
     <ClInclude Include="public\scene\scene_field_test.h" />
     <ClInclude Include="public\scene\scene_font_test.h" />
@@ -170,6 +172,7 @@
     <ClInclude Include="public\vn_model.h" />
     <ClInclude Include="public\vn_object.h" />
     <ClInclude Include="public\vn_sprite.h" />
+    <ClInclude Include="public\UIManager.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="vn_framework3D_2026_Adv.h" />
@@ -213,6 +216,9 @@
     <ClCompile Include="public\vn_object.cpp" />
     <ClCompile Include="public\vn_sprite.cpp" />
     <ClCompile Include="public\Ball.cpp" />
+    <ClCompile Include="public\BallsManager.cpp" />
+    <ClCompile Include="public\HoleBase.cpp" />
+    <ClCompile Include="public\UIManager.cpp" />
     <ClCompile Include="vn_framework3D_2026_Adv.cpp" />
   </ItemGroup>
   <ItemGroup>

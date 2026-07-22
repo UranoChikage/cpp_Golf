@@ -8,6 +8,7 @@ Ball::Ball(float radius, CollisionManager* terrainManager,
 	shape = new SphereShape(radius, terrainManager, obstacleManager);
 	pb = new PhysicsBody();
 	pb->SetCollisionShape(shape);
+	pb->SetOwner(this);
 
 	isActive = true;//仮ですぐにゲーム開始状態にする
 }

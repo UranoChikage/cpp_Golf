@@ -105,7 +105,11 @@ using namespace DirectX;
 #include "../public/CollisionManager.h"
 #include "../public/MatrixMath.h"
 #include "../public/PhysicsBody.h"
+#include "../public/UIManager.h"
 #include "../public/Ball.h"
+#include "../public/BallsManager.h"
+#include "../public/HoleBase.h"
+#include "../public/PlayerScore.h"
 #include "../public/SphereShape.h"
 
 

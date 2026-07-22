@@ -21,7 +21,7 @@ private:
 	CollisionManager* pTerrainManager;
 	CollisionManager* pObstacleManager;
 
-	//=== Ball(仮テスト用) ===
+	//=== Ball(仮テスト用、実体はBallsManagerが所有) ===
 	Ball* pBall;
 	vnModel* pBallModel; // ボールの見た目用
 
@@ -37,6 +37,8 @@ private:
 
 	void DebugDrawResult(const wchar_t* label, float y,
 		const vnCollide::stSegment& ray, bool result, const XMVECTOR& hit, const XMVECTOR& nor);
+
+
 public:
 	//初期化
 	bool initialize();

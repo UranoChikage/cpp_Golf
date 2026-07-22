@@ -186,6 +186,15 @@
     <ClInclude Include="public\BallsManager.h">
       <Filter>public</Filter>
     </ClInclude>
+    <ClInclude Include="public\HoleBase.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="public\PlayerScore.h">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="public\UIManager.h">
+      <Filter>public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vn_framework3D_2026_Adv.cpp">
@@ -297,6 +306,15 @@
       <Filter>public</Filter>
     </ClCompile>
     <ClCompile Include="public\Ball.cpp">
+      <Filter>public</Filter>
+    </ClCompile>
+    <ClCompile Include="public\BallsManager.cpp">
+      <Filter>public</Filter>
+    </ClCompile>
+    <ClCompile Include="public\HoleBase.cpp">
+      <Filter>public</Filter>
+    </ClCompile>
+    <ClCompile Include="public\UIManager.cpp">
       <Filter>public</Filter>
     </ClCompile>
     <ClCompile Include="public\PhysicsBody.cpp">
