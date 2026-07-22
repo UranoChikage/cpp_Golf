@@ -142,6 +142,8 @@
     <ClInclude Include="framework\vn_motionData.h" />
     <ClInclude Include="framework\vn_mouse.h" />
     <ClInclude Include="framework\vn_sound.h" />
+    <ClInclude Include="public\Ball.h" />
+    <ClInclude Include="public\BallsManager.h" />
     <ClInclude Include="public\Collider.h" />
     <ClInclude Include="public\CollisionManager.h" />
     <ClInclude Include="public\Contact.h" />
@@ -149,6 +151,7 @@
     <ClInclude Include="public\ICollisionShape.h" />
     <ClInclude Include="public\IHitReceiver.h" />
     <ClInclude Include="public\MatrixMath.h" />
+    <ClInclude Include="public\PhysicsBody.h" />
     <ClInclude Include="public\scene\scene_boot.h" />
     <ClInclude Include="public\scene\scene_field_test.h" />
     <ClInclude Include="public\scene\scene_font_test.h" />
@@ -159,6 +162,7 @@
     <ClInclude Include="public\scene\scene_sprite_test.h" />
     <ClInclude Include="public\scene\scene_table.h" />
     <ClInclude Include="public\scene\vn_scene.h" />
+    <ClInclude Include="public\SphereShape.h" />
     <ClInclude Include="public\vn_billboard.h" />
     <ClInclude Include="public\vn_character.h" />
     <ClInclude Include="public\vn_collide.h" />
@@ -189,6 +193,7 @@
     <ClCompile Include="public\Collider.cpp" />
     <ClCompile Include="public\CollisionManager.cpp" />
     <ClCompile Include="public\MatrixMath.cpp" />
+    <ClCompile Include="public\PhysicsBody.cpp" />
     <ClCompile Include="public\scene\scene_boot.cpp" />
     <ClCompile Include="public\scene\scene_field_test.cpp" />
     <ClCompile Include="public\scene\scene_font_test.cpp" />
@@ -199,6 +204,7 @@
     <ClCompile Include="public\scene\scene_sprite_test.cpp" />
     <ClCompile Include="public\scene\scene_table.cpp" />
     <ClCompile Include="public\scene\vn_scene.cpp" />
+    <ClCompile Include="public\SphereShape.cpp" />
     <ClCompile Include="public\vn_billboard.cpp" />
     <ClCompile Include="public\vn_character.cpp" />
     <ClCompile Include="public\vn_collide.cpp" />
@@ -206,6 +212,7 @@
     <ClCompile Include="public\vn_model.cpp" />
     <ClCompile Include="public\vn_object.cpp" />
     <ClCompile Include="public\vn_sprite.cpp" />
+    <ClCompile Include="public\Ball.cpp" />
     <ClCompile Include="vn_framework3D_2026_Adv.cpp" />
   </ItemGroup>
   <ItemGroup>

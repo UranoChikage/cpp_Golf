@@ -50,8 +50,8 @@ bool CollisionManager::OverlapSphere(const XMVECTOR& center, float radius, std::
 			XMStoreFloat3(&contact.point, closest);
 			XMStoreFloat3(&contact.normal, normal);
 			contact.penetration = penetration;
-			contact.hit = nullptr;
-			contact.isTigger = false;
+			contact.hit = c->hitReceiver;
+			contact.isTigger = c->isTrigger;
 			outContacts.push_back(contact);
 		}
 	}

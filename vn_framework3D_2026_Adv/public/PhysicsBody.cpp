@@ -32,7 +32,7 @@ void PhysicsBody::Step(float deltaTime)
 	//地形衝突判定
 	XMFLOAT3 posF3;
 	XMStoreFloat3(&posF3, pos);
-	Contact c = collisionShape->QueryTerrain(posF3);
+	Contact c = collisionShape->QueryTerrain(&posF3);
 	bool wasGrounded = isGrounded; // 前フレームの接地状態を保存
 	XMVECTOR cNormal = XMVectorZero();
 	if (c.isHit)
@@ -50,7 +50,7 @@ void PhysicsBody::Step(float deltaTime)
 	//障害物
 	XMStoreFloat3(&posF3, pos);
 	std::vector<Contact> obstacle;
-	collisionShape->QueryObstacle(posF3, obstacle);
+	collisionShape->QueryObstacle(&posF3, obstacle);
 	bool wasObstaclrHit = isObstaclehit;
 	if (!obstacle.empty())
 	{
@@ -127,7 +127,7 @@ void PhysicsBody::Step(float deltaTime)
 		XMFLOAT3 deltaF3, normalF3;
 		XMStoreFloat3(&deltaF3, deltapos);
 		XMStoreFloat3(&normalF3, cNormal);
-		collisionShape->UpdateOrientation(deltaF3, normalF3);
+		collisionShape->UpdateOrientation(&deltaF3, &normalF3);
 	}
 
 	pos += velocity * deltaTime;

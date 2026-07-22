@@ -18,7 +18,16 @@ private:
 	MeshCollider* pMeshCollider;
 	vnCollide::stSegment meshRay;
 
-	CollisionManager* pCollisionManager;
+	CollisionManager* pTerrainManager;
+	CollisionManager* pObstacleManager;
+
+	//=== Ball(仮テスト用) ===
+	Ball* pBall;
+	vnModel* pBallModel; // ボールの見た目用
+
+	//=== 地形(でこぼこ道) ===
+	vnModel* pGroundModel;
+	MeshCollider* pGroundCollider;
 
 	//=== カメラ(注視点を中心にオービット) ===
 	float radius;

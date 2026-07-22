@@ -1,4 +1,4 @@
-//--------------------------------------------------------------//
+﻿//--------------------------------------------------------------//
 //	"vn_environment.h"											//
 //		�t���[�����[�N���ʊ��w�b�_�[							//
 //													2026/01/01	//
@@ -98,12 +98,17 @@ using namespace DirectX;
 #include "../public/vn_collide.h"
 
 #include "../public/IHitReceiver.h"
+#include "../public/IBall.h"
 #include "../public/Contact.h"
 #include "../public/ICollisionShape.h"
 #include "../public/Collider.h"
 #include "../public/CollisionManager.h"
 #include "../public/MatrixMath.h"
 #include "../public/PhysicsBody.h"
+#include "../public/Ball.h"
+#include "../public/SphereShape.h"
+
+
 
 #include "../public/scene/vn_scene.h"
 #include "../public/scene/scene_table.h"

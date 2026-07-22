@@ -5,7 +5,9 @@
 //初期化
 bool SceneMyGame::initialize()
 {
-	pCollisionManager = new CollisionManager();
+	pTerrainManager = new CollisionManager();
+	pObstacleManager = new CollisionManager();
+
 
 	//=== Box (x=-3) ===
 	pBoxModel = new vnModel(L"data/model/primitive/", L"cube_soft.vnm");
@@ -14,7 +16,7 @@ bool SceneMyGame::initialize()
 	registerObject(pBoxModel);
 
 	pBoxCollider = new BoxCollider(*pBoxModel->getPosition(), *pBoxModel->getScale() * 0.5f);
-	pCollisionManager->Add(pBoxCollider);
+	pObstacleManager->Add(pBoxCollider);
 
 	{
 		XMVECTOR from = XMVectorSet(-3.0f, 0.0f, -2.0f, 1.0f);
@@ -28,8 +30,8 @@ bool SceneMyGame::initialize()
 	pSphereModel->setScale(1.0f, 1.0f, 1.0f);
 	registerObject(pSphereModel);
 
-	pSphereCollider = new SphereCollider(*pSphereModel->getPosition(), 0.5f);
-	pCollisionManager->Add(pSphereCollider);
+	pSphereCollider = new SphereCollider(*pSphereModel->getPosition(), 1.0f);
+	pObstacleManager->Add(pSphereCollider);
 
 	{
 		XMVECTOR from = XMVectorSet(0.0f, 0.0f, -2.0f, 1.0f);
@@ -45,13 +47,31 @@ bool SceneMyGame::initialize()
 	pMeshModel->postExecute(); // World行列を確定させてからTrianglesを構築する
 
 	pMeshCollider = new MeshCollider(MeshCollider::BuildTriangles(pMeshModel));
-	pCollisionManager->Add(pMeshCollider);
+	pObstacleManager->Add(pMeshCollider);
 
 	{
-		XMVECTOR from = XMVectorSet(3.0f,1.0f, -2.0f, 1.0f);
+		XMVECTOR from = XMVectorSet(3.0f, 1.0f, -2.0f, 1.0f);
 		XMVECTOR to = XMVectorSet(3.0f, 1.0f, 2.0f, 1.0f);
 		meshRay.fromPoints(&from, &to);
 	}
+
+	//=== でこぼこ ===
+	pGroundModel = new vnModel(L"data/model/", L"noised_ground.vnm");
+	pGroundModel->setScaleX(1.0f);
+	pGroundModel->setScaleZ(1.0f);
+	registerObject(pGroundModel);
+	pGroundModel->postExecute(); // World行列を確定させてからTrianglesを構築する
+
+	pGroundCollider = new MeshCollider(MeshCollider::BuildTriangles(pGroundModel));
+	pTerrainManager->Add(pGroundCollider);
+
+	//=== Ball(仮テスト用) ===
+	pBall = new Ball(1.0f, pTerrainManager, pObstacleManager);
+	pBall->GetPhysicsBody()->setPosition(0.5f, 3.0f, 0.0f);
+
+	pBallModel = new vnModel(L"data/model/primitive/", L"sphere.vnm");
+	pBallModel->setScale(1.0f, 1.0f, 1.0f);
+	registerObject(pBallModel);
 
 	radius = 8.0f;
 	theta = 0.0f; // Y軸回転(度数)
@@ -65,7 +85,11 @@ void SceneMyGame::terminate()
 	deleteObject(pBoxModel);
 	deleteObject(pSphereModel);
 	deleteObject(pMeshModel);
-	delete pCollisionManager;
+	deleteObject(pBallModel);
+	deleteObject(pGroundModel);
+	delete pTerrainManager;
+	delete pObstacleManager;
+	delete pBall;
 }
 
 //処理
@@ -89,6 +113,14 @@ void SceneMyGame::execute()
 	DebugDrawResult(L"Box", 20.0f, boxRay, boxResult, boxHit, boxNor);
 	DebugDrawResult(L"Sphere", 40.0f, sphereRay, sphereResult, sphereHit, sphereNor);
 	DebugDrawResult(L"Mesh", 60.0f, meshRay, meshResult, meshHit, meshNor);
+
+	//=== Ball(仮テスト用) ===
+	pBall->GetPhysicsBody()->Step(1.0f / 60.0f);
+	XMVECTOR ballPos = pBall->GetPosition();
+	pBallModel->setPosition(&ballPos);
+	vnFont::print(20.0f, 80.0f, L"Ball Pos(%.2f,%.2f,%.2f)",
+		XMVectorGetX(ballPos), XMVectorGetY(ballPos), XMVectorGetZ(ballPos));
+
 
 	vnScene::execute();
 }
@@ -119,13 +151,14 @@ void SceneMyGame::updateCamera()
 	}
 
 	//注視点からradiusぶん離れた位置を、theta/phiで回転させてカメラ座標を求める
-	XMVECTOR v = XMVectorSet(0.0f, 0.0f, -radius, 0.0f);
+	XMVECTOR target = pBall->GetPosition();
+
+	XMVECTOR v = XMVectorSet(0, 0, -radius, 0.0f);
 	XMMATRIX rotate = MatrixMath::RotationX(phi) * MatrixMath::RotationY(theta);
 	v = MatrixMath::MultiplyVector(rotate, v);
 
-	vnCamera::setPosition(&v);
-
-	XMVECTOR target = XMVectorZero();
+	XMVECTOR camPos = target + v; // 注視点からのオフセットとしてカメラ位置を求める
+	vnCamera::setPosition(&camPos);
 	vnCamera::setTarget(&target);
 }
 

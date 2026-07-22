@@ -1,14 +1,17 @@
 ﻿#pragma once
 #include <functional>
+
+/***************************************************************
+ * インターフェイス名：IBall
+ *
+ * *************************************************************/
 class IBall
 {
 public:
-	bool GetIsActive() const
-	{
-		return IsActive;
-	}
-	std::function<IBall()> OnShotAdded;
-private:
+	virtual ~IBall() = default;
+
+	virtual bool GetIsActive() const = 0;
 	virtual void Deactivate() = 0;
-	bool IsActive;
+
+	std::function<void(IBall*)> OnShotAdded;
 };

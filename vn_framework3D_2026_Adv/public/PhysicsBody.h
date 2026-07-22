@@ -21,7 +21,7 @@ private:
 	//物理パラメーター
 	float gravity = 9.8f; // 重力加速度
 	float rollingFriction = 0.015f; // 転がり抵抗係数
-	float bounciness = 0.8f; // 反発係数
+	float bounciness = 0.15f; // 反発係数
 
 	//停止判定パラメーター
 	float timeOut = 0.5f;

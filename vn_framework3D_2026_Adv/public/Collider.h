@@ -5,6 +5,10 @@ class Collider
 protected:
 	XMVECTOR center;
 public:
+	//このコライダーに当たった時に通知する相手(いなければnullptrのまま)
+	IHitReceiver* hitReceiver = nullptr;
+	bool isTrigger = false;
+
 
 	virtual bool IsCollide(const vnCollide::stSegment& ray,
 		XMVECTOR* hit, XMVECTOR* nor) = 0; // 中身は各形状が実装する

@@ -445,7 +445,8 @@ std::vector<vnCollide::stTriangle> MeshCollider::BuildTriangles(vnModel* p)
 			v2 = XMVector3TransformCoord(v2, *p->getWorld());
 			v3 = XMVector3TransformCoord(v3, *p->getWorld());
 
-			tri.fromPoints(&v1, &v2, &v3);
+			//このモデルの頂点の並び順だと法線が内側を向いてしまうので、v2とv3を入れ替えて巻き順を逆にする
+			tri.fromPoints(&v1, &v3, &v2);
 			triangles.push_back(tri);
 		}
 	}
