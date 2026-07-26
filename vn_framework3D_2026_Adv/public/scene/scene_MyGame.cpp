@@ -75,10 +75,14 @@ bool SceneMyGame::initialize()
 	pBallModel->setScale(1.0f, 1.0f, 1.0f);
 	registerObject(pBallModel);
 
-	//=== カメラ(マウス操作) ===
+	//=== カメラ(DirectionController) ===
+	pCamCon = new CameraController(&DirCon);
 	ballPos = pBall->GetPosition();
-	camCon.SetTarget(&ballPos);
-	camCon.CameraUpdate(1.0f); // 最初のフレームでいきなりターゲット位置まで寄せておく
+	pCamCon->SetTarget(&ballPos);
+	pCamCon->CameraUpdate(1.0f); // 最初のフレームでいきなりターゲット位置まで寄せておく
+
+	//===　ショット操作(DirectionController) ===
+	pShotInput = new ShotInput(pBall, &DirCon);
 
 	return true;
 }
@@ -92,6 +96,8 @@ void SceneMyGame::terminate()
 	deleteObject(pGroundModel);
 	delete pTerrainManager;
 	delete pObstacleManager;
+	delete pCamCon;
+	delete pShotInput;
 	BallsManager::GetInstance().RemoveBall(0);
 }
 
@@ -123,7 +129,11 @@ void SceneMyGame::execute()
 		XMVectorGetX(ballPos), XMVectorGetY(ballPos), XMVectorGetZ(ballPos));
 
 	//=== カメラ(マウス操作) ===
-	camCon.CameraUpdate(1.0f / 60.0f);
+	pCamCon->CameraUpdate(1.0f / 60.0f);
+
+	//===　ショット操作(DirectionController) ===
+	pShotInput->ShotInputUpdate(1.0f / 60.0f);
+	vnFont::print(20.0f, 100.0f, L"Power:%.0f%%", pShotInput->GetMeterValue() * 100.0f);
 
 
 	vnScene::execute();

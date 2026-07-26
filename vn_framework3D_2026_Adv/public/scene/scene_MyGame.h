@@ -30,11 +30,19 @@ private:
 	vnModel* pGroundModel;
 	MeshCollider* pGroundCollider;
 
-	//=== カメラ(マウス操作) ===
-	CameraController camCon;
+
+
+	//=== 方向管理(マウス操作) ===
+	DirectionController DirCon;
+	//=== カメラ(DirectionController) ===
+	CameraController* pCamCon;
+
+	//===　ショット操作(DirectionController) ===
+	ShotInput *pShotInput;
 
 	void DebugDrawResult(const wchar_t* label, float y,
 		const vnCollide::stSegment& ray, bool result, const XMVECTOR& hit, const XMVECTOR& nor);
+
 
 
 public:

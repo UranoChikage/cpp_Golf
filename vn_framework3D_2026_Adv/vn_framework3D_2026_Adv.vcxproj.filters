@@ -201,6 +201,9 @@
     <ClInclude Include="public\CameraController.h">
       <Filter>public</Filter>
     </ClInclude>
+    <ClInclude Include="public\ShotInput.h">
+      <Filter>public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vn_framework3D_2026_Adv.cpp">
@@ -333,6 +336,9 @@
       <Filter>public</Filter>
     </ClCompile>
     <ClCompile Include="public\CameraController.cpp">
+      <Filter>public</Filter>
+    </ClCompile>
+    <ClCompile Include="public\ShotInput.cpp">
       <Filter>public</Filter>
     </ClCompile>
   </ItemGroup>

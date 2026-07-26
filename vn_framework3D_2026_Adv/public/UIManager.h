@@ -11,7 +11,7 @@ class PlayerScore;//前方宣言
 class UIManager
 {
 private:
-	UIManager() {}
+	UIManager() {};
 	UIManager(const UIManager&) = delete;
 	UIManager& operator=(const UIManager&) = delete;
 

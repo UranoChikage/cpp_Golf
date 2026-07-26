@@ -110,6 +110,7 @@ using namespace DirectX;
 #include "../public/UIManager.h"
 #include "../public/Ball.h"
 #include "../public/BallsManager.h"
+#include "../public/ShotInput.h"
 #include "../public/HoleBase.h"
 #include "../public/PlayerScore.h"
 #include "../public/SphereShape.h"

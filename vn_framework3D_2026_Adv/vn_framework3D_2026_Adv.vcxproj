@@ -170,6 +170,7 @@
     <ClInclude Include="public\scene\scene_sprite_test.h" />
     <ClInclude Include="public\scene\scene_table.h" />
     <ClInclude Include="public\scene\vn_scene.h" />
+    <ClInclude Include="public\ShotInput.h" />
     <ClInclude Include="public\SphereShape.h" />
     <ClInclude Include="public\vn_billboard.h" />
     <ClInclude Include="public\vn_character.h" />
@@ -215,6 +216,7 @@
     <ClCompile Include="public\scene\scene_sprite_test.cpp" />
     <ClCompile Include="public\scene\scene_table.cpp" />
     <ClCompile Include="public\scene\vn_scene.cpp" />
+    <ClCompile Include="public\ShotInput.cpp" />
     <ClCompile Include="public\SphereShape.cpp" />
     <ClCompile Include="public\vn_billboard.cpp" />
     <ClCompile Include="public\vn_character.cpp" />
