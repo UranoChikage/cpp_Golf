@@ -3,6 +3,13 @@
 
 PhysicsBody::PhysicsBody()
 {
+	gravity = 9.8f;
+	rollingFriction = 0.015f;
+	bounciness = 0.15f;
+
+	timeOut = 3;
+	minMagnitude = 0.06f;
+	velocityChangeThreshold = 0.1f;
 }
 
 void PhysicsBody::SetCollisionShape(ICollisionShape* shape)
@@ -37,9 +44,9 @@ void PhysicsBody::Step(float deltaTime)
 	XMVECTOR cNormal = XMVectorZero();
 	if (c.isHit)
 	{
-		pos = XMVectorSetY(pos, XMVectorGetY(pos) + c.penetration);
 		isGrounded = true;
 		cNormal = XMLoadFloat3(&c.normal);
+		pos += cNormal * c.penetration;
 	}
 	else
 	{
@@ -51,7 +58,7 @@ void PhysicsBody::Step(float deltaTime)
 	/*
 	* 2026/07/20　問題発生明日やる
 	* なぜか障害物の側面の挙動が変、めり込んでってしまう
-	* 
+	*
 	* 2026/07/21　解決できた～
 	* 壁(IsWall=true)の場合だけ毎フレームの押し出し(pos += oNormal * penetration)が
 	* 丸ごとスキップされる書き方になっていたのが原因でした。床判定(isGrounded)の方だけ
@@ -102,7 +109,7 @@ void PhysicsBody::Step(float deltaTime)
 	{
 		ApplyBounce(cNormal);
 	}
-	else if (obstacleNew)
+	else if (!obstacle.empty())
 	{
 		for (auto& o : obstacle)
 		{

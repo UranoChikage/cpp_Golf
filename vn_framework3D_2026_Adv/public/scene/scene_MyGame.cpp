@@ -13,11 +13,11 @@ bool SceneMyGame::initialize()
 	pBoxModel = new vnModel(L"data/model/primitive/", L"cube_soft.vnm");
 	pBoxModel->setPosition(-3.0f, 0.0f, 0.0f);
 	pBoxModel->setScale(1.0f, 1.0f, 3.0f);
-	//pBoxModel->setRotationZ(45);
+	pBoxModel->setRotationZ(45);
 	registerObject(pBoxModel);
 
 	pBoxCollider = new BoxCollider(*pBoxModel->getPosition(), *pBoxModel->getScale() * 1.0f);
-	//pBoxCollider->SetRotate(*pBoxModel->getRotation());
+	pBoxCollider->SetRotate(*pBoxModel->getRotation());
 	pObstacleManager->Add(pBoxCollider);
 
 	{
@@ -59,8 +59,8 @@ bool SceneMyGame::initialize()
 
 	//=== でこぼこ ===
 	pGroundModel = new vnModel(L"data/model/", L"noised_ground.vnm");
-	pGroundModel->setScaleX(1.0f);
-	pGroundModel->setScaleZ(1.0f);
+	pGroundModel->setScaleX(2.0f);
+	pGroundModel->setScaleZ(2.0f);
 	registerObject(pGroundModel);
 	pGroundModel->postExecute(); // World行列を確定させてからTrianglesを構築する
 
@@ -69,16 +69,17 @@ bool SceneMyGame::initialize()
 
 	//=== Ball===
 	pBall = BallsManager::GetInstance().AddBall(0, 1.0f, pTerrainManager, pObstacleManager);
-	pBall->GetPhysicsBody()->setPosition(-0.5f, 3.0f, 0.0f);
+	pBall->GetPhysicsBody()->setPosition(-3.0f, 3.0f, 1.0f);
 
 	pBallModel = new vnModel(L"data/model/primitive/", L"sphere.vnm");
 	pBallModel->setScale(1.0f, 1.0f, 1.0f);
 	registerObject(pBallModel);
 
-	radius = 8.0f;
-	theta = 0.0f; // Y軸回転(度数)
-	phi = 20.0f;  // X軸回転(度数)
-	updateCamera();
+	//=== カメラ(マウス操作) ===
+	ballPos = pBall->GetPosition();
+	camCon.SetTarget(&ballPos);
+	camCon.CameraUpdate(1.0f); // 最初のフレームでいきなりターゲット位置まで寄せておく
+
 	return true;
 }
 //終了
@@ -106,8 +107,6 @@ void SceneMyGame::execute()
 	XMVECTOR meshHit, meshNor;
 	bool meshResult = pMeshCollider->IsCollide(meshRay, &meshHit, &meshNor);
 
-	updateCamera();
-
 	vnDebugDraw::Grid();
 	vnDebugDraw::Axis();
 
@@ -118,10 +117,13 @@ void SceneMyGame::execute()
 
 	//=== Ball(仮テスト用) ===
 	pBall->GetPhysicsBody()->Step(1.0f / 60.0f);
-	XMVECTOR ballPos = pBall->GetPosition();
+	ballPos = pBall->GetPosition();
 	pBallModel->setPosition(&ballPos);
 	vnFont::print(20.0f, 80.0f, L"Ball Pos(%.2f,%.2f,%.2f)",
 		XMVectorGetX(ballPos), XMVectorGetY(ballPos), XMVectorGetZ(ballPos));
+
+	//=== カメラ(マウス操作) ===
+	camCon.CameraUpdate(1.0f / 60.0f);
 
 
 	vnScene::execute();
@@ -130,38 +132,6 @@ void SceneMyGame::execute()
 void SceneMyGame::render()
 {
 	vnScene::render();
-}
-
-void SceneMyGame::updateCamera()
-{
-	//矢印キーでオービット回転(度数で加算)
-	if (vnKeyboard::on(DIK_UP))
-	{
-		phi += 1.0f;
-	}
-	if (vnKeyboard::on(DIK_DOWN))
-	{
-		phi -= 1.0f;
-	}
-	if (vnKeyboard::on(DIK_LEFT))
-	{
-		theta += 1.0f;
-	}
-	if (vnKeyboard::on(DIK_RIGHT))
-	{
-		theta -= 1.0f;
-	}
-
-	//注視点からradiusぶん離れた位置を、theta/phiで回転させてカメラ座標を求める
-	XMVECTOR target = pBall->GetPosition();
-
-	XMVECTOR v = XMVectorSet(0, 0, -radius, 0.0f);
-	XMMATRIX rotate = MatrixMath::RotationX(phi) * MatrixMath::RotationY(theta);
-	v = MatrixMath::MultiplyVector(rotate, v);
-
-	XMVECTOR camPos = target + v; // 注視点からのオフセットとしてカメラ位置を求める
-	vnCamera::setPosition(&camPos);
-	vnCamera::setTarget(&target);
 }
 
 void SceneMyGame::DebugDrawResult(const wchar_t* label, float y,

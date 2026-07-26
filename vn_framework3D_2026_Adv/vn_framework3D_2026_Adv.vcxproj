@@ -76,6 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -90,6 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -102,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -116,6 +119,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -144,9 +148,11 @@
     <ClInclude Include="framework\vn_sound.h" />
     <ClInclude Include="public\Ball.h" />
     <ClInclude Include="public\BallsManager.h" />
+    <ClInclude Include="public\CameraController.h" />
     <ClInclude Include="public\Collider.h" />
     <ClInclude Include="public\CollisionManager.h" />
     <ClInclude Include="public\Contact.h" />
+    <ClInclude Include="public\DirectionController.h" />
     <ClInclude Include="public\HoleBase.h" />
     <ClInclude Include="public\IBall.h" />
     <ClInclude Include="public\ICollisionShape.h" />
@@ -193,8 +199,10 @@
     <ClCompile Include="framework\vn_mainframe.cpp" />
     <ClCompile Include="framework\vn_mouse.cpp" />
     <ClCompile Include="framework\vn_sound.cpp" />
+    <ClCompile Include="public\CameraController.cpp" />
     <ClCompile Include="public\Collider.cpp" />
     <ClCompile Include="public\CollisionManager.cpp" />
+    <ClCompile Include="public\DirectionController.cpp" />
     <ClCompile Include="public\MatrixMath.cpp" />
     <ClCompile Include="public\PhysicsBody.cpp" />
     <ClCompile Include="public\scene\scene_boot.cpp" />

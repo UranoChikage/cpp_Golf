@@ -104,6 +104,8 @@ using namespace DirectX;
 #include "../public/Collider.h"
 #include "../public/CollisionManager.h"
 #include "../public/MatrixMath.h"
+#include "../public/DirectionController.h"
+#include "../public/CameraController.h"
 #include "../public/PhysicsBody.h"
 #include "../public/UIManager.h"
 #include "../public/Ball.h"

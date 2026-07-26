@@ -9,26 +9,26 @@ class IBall;//前方宣言
  * 機能：重力・地形/障害物との衝突・転がり・跳ね返りを扱う物理挙動クラス
  * *************************************************************/
 
-//AddForceで力の加え方を切り替える種類
+ //AddForceで力の加え方を切り替える種類
 enum class ForceMode
 {
 	Force,
 	Impulse,
 	VelocityChange,
 };
-//物理パラメーターはこのクラスでのみ変更可能
+//物理パラメーターはこのクラスのコンストラクタでのみ変更可能
 class PhysicsBody : public vnObject
 {
 private:
 	//物理パラメーター
-	float gravity = 9.8f; // 重力加速度
-	float rollingFriction = 0.015f; // 転がり抵抗係数
-	float bounciness = 0.15f; // 反発係数
+	float gravity; // 重力加速度
+	float rollingFriction; // 転がり抵抗係数
+	float bounciness; // 反発係数
 
 	//停止判定パラメーター
-	float timeOut = 3;
-	float minMagnitude = 0.06f; // 動きが止まったとみなす速度の閾値
-	float velocityChangeThreshold = 0.1f; // 速度の変化がこの値以下なら停止とみなす
+	float timeOut;
+	float minMagnitude; // 動きが止まったとみなす速度の閾値
+	float velocityChangeThreshold; // 速度の変化がこの値以下なら停止とみなす
 
 	ICollisionShape* collisionShape = nullptr;
 

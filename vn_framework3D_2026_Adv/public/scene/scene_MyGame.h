@@ -24,16 +24,14 @@ private:
 	//=== Ball(仮テスト用、実体はBallsManagerが所有) ===
 	Ball* pBall;
 	vnModel* pBallModel; // ボールの見た目用
+	XMVECTOR ballPos; // カメラのターゲットとしてアドレスを渡し続けるためメンバで持つ
 
 	//=== 地形(でこぼこ道) ===
 	vnModel* pGroundModel;
 	MeshCollider* pGroundCollider;
 
-	//=== カメラ(注視点を中心にオービット) ===
-	float radius;
-	float theta;
-	float phi;
-	void updateCamera();
+	//=== カメラ(マウス操作) ===
+	CameraController camCon;
 
 	void DebugDrawResult(const wchar_t* label, float y,
 		const vnCollide::stSegment& ray, bool result, const XMVECTOR& hit, const XMVECTOR& nor);
