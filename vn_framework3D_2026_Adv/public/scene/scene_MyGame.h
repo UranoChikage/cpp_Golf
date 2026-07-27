@@ -6,17 +6,14 @@ private:
 	//=== Box ===
 	vnModel* pBoxModel;
 	BoxCollider* pBoxCollider;
-	vnCollide::stSegment boxRay;
 
 	//=== Sphere ===
 	vnModel* pSphereModel;
 	SphereCollider* pSphereCollider;
-	vnCollide::stSegment sphereRay;
 
 	//=== Mesh ===
 	vnModel* pMeshModel;
 	MeshCollider* pMeshCollider;
-	vnCollide::stSegment meshRay;
 
 	CollisionManager* pTerrainManager;
 	CollisionManager* pObstacleManager;
@@ -40,8 +37,6 @@ private:
 	//===　ショット操作(DirectionController) ===
 	ShotInput *pShotInput;
 
-	void DebugDrawResult(const wchar_t* label, float y,
-		const vnCollide::stSegment& ray, bool result, const XMVECTOR& hit, const XMVECTOR& nor);
 	//MeshColliderの三角形をワイヤーフレームで描画する(コライダーの抜け・ズレ確認用)
 	void DebugDrawMeshCollider(MeshCollider* pCollider, DWORD color);
 	//球コライダーを3平面の円でワイヤーフレーム描画する
