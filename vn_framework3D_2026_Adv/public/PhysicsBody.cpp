@@ -6,6 +6,7 @@ PhysicsBody::PhysicsBody()
 	gravity = 9.8f;
 	rollingFriction = 0.015f;
 	bounciness = 0.15f;
+	bounceImpactThreshold = 1.0f;
 
 	timeOut = 3;
 	minMagnitude = 0.06f;
@@ -101,12 +102,12 @@ void PhysicsBody::Step(float deltaTime)
 		{
 			XMVECTOR oNormal = XMLoadFloat3(&o.normal);
 			XMVECTOR combined = XMVector3Normalize(cNormal + oNormal);
-			if (ApplyBounce(combined) && OnBounce) OnBounce(pos, combined);
+			if (ApplyBounce(combined, &isImpact) && OnBounce && isImpact) OnBounce(pos, combined);
 		}
 	}
 	else if (terrainNew)
 	{
-		if (ApplyBounce(cNormal) && OnBounce) OnBounce(pos, cNormal);
+		if (ApplyBounce(cNormal,&isImpact) && OnBounce && isImpact) OnBounce(pos, cNormal);
 	}
 	else if (!obstacle.empty())
 	{
@@ -117,7 +118,7 @@ void PhysicsBody::Step(float deltaTime)
 			if (!o.isTrigger)
 			{
 				XMVECTOR oNormal = XMLoadFloat3(&o.normal);
-				if (ApplyBounce(oNormal) && OnBounce) OnBounce(pos, oNormal);
+				if (ApplyBounce(oNormal, &isImpact) && OnBounce&& isImpact) OnBounce(pos, oNormal);
 			}
 		}
 	}
@@ -129,7 +130,7 @@ void PhysicsBody::Step(float deltaTime)
 		//転がり抵抗をかける
 		if (MatrixMath::IsWall(cNormal, 60.0f)) //ひとまず60°までが床
 		{
-			ApplyBounce(cNormal);
+			ApplyBounce(cNormal, &isImpact);
 		}
 		velocity *= (1.0f - rollingFriction);
 		XMVECTOR down = XMVectorSet(0.0f, -gravity, 0.0f, 0.0f);
@@ -175,10 +176,14 @@ void PhysicsBody::Step(float deltaTime)
 	}
 }
 
-bool PhysicsBody::ApplyBounce(const XMVECTOR& normal)
+bool PhysicsBody::ApplyBounce(const XMVECTOR& normal,bool* outIslmpact)
 {
 	// 速度を法線方向と接線方向に分解
 	float normalSpeed = MatrixMath::Dot(velocity, normal); // 法線方向の速度
+
+	//しきい値より勢いよくぶつかった時だけ「衝突」とみなす(重力によるわずかな速度変化と区別するため)
+	if (outIslmpact) *outIslmpact = normalSpeed < -bounceImpactThreshold;
+
 	if (normalSpeed < 0.0f)
 	{
 		XMVECTOR normalVelocity = normal * normalSpeed;

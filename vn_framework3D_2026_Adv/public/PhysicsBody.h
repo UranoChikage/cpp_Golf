@@ -24,6 +24,7 @@ private:
 	float gravity; // 重力加速度
 	float rollingFriction; // 転がり抵抗係数
 	float bounciness; // 反発係数
+	float bounceImpactThreshold; // これより勢いよく(normalSpeedがマイナス方向に)ぶつかった時だけ「衝突」とみなす
 
 	//停止判定パラメーター
 	float timeOut;
@@ -39,13 +40,14 @@ private:
 	bool isMoving = false; // 動いているかどうか
 	bool isGrounded = false; // 地面に接しているかどうか
 	bool isObstaclehit = false;
+	bool isImpact = false;
 	float velocityChange = 0.0f;
 
 	float timeOutTimer = 0.0f;
 	XMVECTOR prevVelocity = XMVectorZero();
 
 	//実際に速度を反発させた(=normalSpeed<0.0fだった)場合だけtrueを返す
-	bool ApplyBounce(const XMVECTOR& normal);
+	bool ApplyBounce(const XMVECTOR& norma,bool* outIslnpact);
 
 public:
 	PhysicsBody();
