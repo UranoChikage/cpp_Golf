@@ -30,8 +30,7 @@ private:
 	//=== パーティクル ===
 	vnEmitter* pShotEmitter; // ショットした瞬間に出す
 	vnEmitter* pHitEmitter; // 地形/障害物にヒットした瞬間に出す
-	float shotEmitTimer = 0.0f; // 0より大きい間だけemitし続ける(バースト表現用)
-	float hitEmitTimer = 0.0f;
+	float hitEmitTimer = 0.0f; // 0より大きい間だけemitし続ける(バースト表現用)
 
 
 

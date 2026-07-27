@@ -71,31 +71,34 @@ bool SceneMyGame::initialize()
 
 	//=== パーティクル ===
 	vnEmitter::stEmitterDesc shotDesc;
-	swprintf_s(shotDesc.Texture, L"%s", L"data/image/particle/particle002.png");
-	shotDesc.ColorMax = XMVectorSet(1.0f, 0.9f, 0.4f, 1.0f);
+	swprintf_s(shotDesc.Texture, L"%s", L"data/image/particle/particle006.png");
+	shotDesc.ColorMax = XMVectorSet(1.0f, 1.0f, 0.5f, 1.0f);
 	pShotEmitter = new vnEmitter(&shotDesc);
+	pShotEmitter->SetMaxSize(3.0f);
+	pShotEmitter->SetSpeed(0.0f); //その場にポンと出したいのでスピードは殺す
+	pShotEmitter->SetGrowSize(true); //徐々に大きくする
+	pShotEmitter->SetFadeAlpha(false);
 	pShotEmitter->setParent(pBallModel);
 	pShotEmitter->setEmit(false);
 	registerObject(pShotEmitter);
 
 	vnEmitter::stEmitterDesc hitDesc;
-	swprintf_s(hitDesc.Texture, L"%s", L"data/image/particle/particle004.png");
+	swprintf_s(hitDesc.Texture, L"%s", L"data/image/particle/particle005.png");
 	hitDesc.ColorMax = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
 	pHitEmitter = new vnEmitter(&hitDesc);
 	pHitEmitter->setParent(pBallModel);
 	pHitEmitter->setEmit(false);
 	registerObject(pHitEmitter);
 
-	//ショットした瞬間にパーティクルをバーストさせる
+	//ショットした瞬間にパーティクルを1個だけバーストさせる(見た目はSet〜で設定済み)
 	pBall->OnShotAdded = [this](IBall*)
 		{
-			shotEmitTimer = 0.2f;
-			pShotEmitter->setEmit(true);
+			pShotEmitter->setEmit(true, 1);
 		};
 	//地形/障害物にヒットした瞬間にパーティクルをバーストさせる
 	pBall->GetPhysicsBody()->OnBounce = [this](const XMVECTOR&, const XMVECTOR&)
 		{
-			hitEmitTimer = 0.2f;
+			hitEmitTimer = 0.1f;
 			pHitEmitter->setEmit(true);
 		};
 
@@ -148,11 +151,6 @@ void SceneMyGame::execute()
 	vnFont::print(20.0f, 100.0f, L"IsMoving:%d", pBall->GetPhysicsBody()->GetIsMoving());
 
 	//=== パーティクルのバースト時間経過管理 ===
-	if (shotEmitTimer > 0.0f)
-	{
-		shotEmitTimer -= 1.0f / 60.0f;
-		if (shotEmitTimer <= 0.0f) pShotEmitter->setEmit(false);
-	}
 	if (hitEmitTimer > 0.0f)
 	{
 		hitEmitTimer -= 1.0f / 60.0f;

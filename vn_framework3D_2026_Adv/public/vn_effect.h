@@ -15,7 +15,9 @@ public:
 	XMVECTOR	Pos;	//位置
 	XMVECTOR	Vel;	//速度
 	XMVECTOR	Col;	//色
-	float		Size;	//サイズ
+	float		Size;	//サイズ(最終的な大きさ)
+	bool		GrowSize;	//trueなら寿命にかけて徐々に大きくなる、falseなら最初からSizeでパッと出す
+	bool		FadeAlpha;	//trueなら寿命にかけて徐々に透明になる、falseなら最初から不透明のまま
 };
 
 //エミッタークラス
@@ -95,6 +97,17 @@ private:
 	//頂点データへの各種情報の設定
 	virtual void setVertexPosition();
 
+	//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+	//フレームワークに自分で機能追加しています。
+	//Set〜で設定した内容を使って放出する(引数だらけになるのを避けるためSet方式にした)
+	float burstSpeed = 0.1f;		//バースト放出時のパーティクルの初速
+	bool burstGrowSize = false;	//バースト放出時、寿命にかけて徐々に大きくするか
+	bool burstFadeAlpha = true;	//バースト放出時、寿命にかけて徐々に透明にするか
+
+	//空いてるパーティクル枠を1つ探して初期設定する(見つからなければ何もしない)
+	void SpawnParticle(const XMVECTOR& worldPos, float size, float speed, bool growSize, bool fadeAlpha);
+	//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
 public:
 	vnEmitter(stEmitterDesc *desc);
 	virtual ~vnEmitter();
@@ -104,6 +117,20 @@ public:
 	virtual void render();
 
 	void setEmit(bool flag);
-
+	//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+	//フレームワークに自分で機能追加しています。
+	//flagがtrueの時、count個のパーティクルをその場で即座にバースト生成する(見た目はSet〜で設定した内容を使う)
+	void setEmit(bool flag, int count);
+	//パーティクル1個の見た目の大きさの上限(継続的な放出/バースト放出どちらでも使うサイズ)を変更する
+	void SetMaxSize(float size) { Desc.SizeMax = size; }
+	//パーティクル1個の見た目の大きさの上限を取得する
+	float GetMaxSize() const { return Desc.SizeMax; }
+	//バースト放出時のパーティクルの初速を変更する
+	void SetSpeed(float speed) { burstSpeed = speed; }
+	//バースト放出時、寿命にかけて徐々に大きくする(true)か最初からパッと出す(false)かを変更する
+	void SetGrowSize(bool flag) { burstGrowSize = flag; }
+	//バースト放出時、寿命にかけて徐々に透明にする(true)か最初から不透明のまま(false)かを変更する
+	void SetFadeAlpha(bool flag) { burstFadeAlpha = flag; }
+	//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 	bool isEmit();
 };

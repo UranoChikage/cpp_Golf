@@ -21,6 +21,8 @@ vnEmitter::vnEmitter(stEmitterDesc* desc)
 		pParticle[i].Vel = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 		pParticle[i].Col = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
 		pParticle[i].Size = 1.0f;
+		pParticle[i].GrowSize = false;
+		pParticle[i].FadeAlpha = true;
 	}
 
 	//描画情報の初期化
@@ -338,30 +340,38 @@ void vnEmitter::execute()
 	XMVECTOR world;
 	getWorldPosition(&world);
 
+	//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+	//元々ここに書かれていた処理
 	//パーティクルの放出
-	for (int i = 0; i < vnPARTICLE_MAX && emit == true; i++)
+	//for (int i = 0; i < vnPARTICLE_MAX && emit == true; i++)
+	//{
+	//	if (pParticle[i].Life > 0.0f)continue;
+	//	//放出可能なパーティクルに初期設定
+	//	pParticle[i].Life = (float)(rand() % 30) + 30.0f;	//30~60
+	//	pParticle[i].StartLife = pParticle[i].Life;
+	//	pParticle[i].Pos = world;
+	//	pParticle[i].Vel = XMVectorSet(
+	//		(float)(rand() % 2000) / 1000.0f - 1.0f,	//-1~+1
+	//		(float)(rand() % 1000) / 1000.0f,			//0~+1
+	//		(float)(rand() % 2000) / 1000.0f - 1.0f,	//-1~+1
+	//		0.0f
+	//	);
+	//	pParticle[i].Vel *= 0.1f;
+	//	/*pParticle[i].Col = XMVectorSet(
+	//		(float)(rand() % 1000) / 1000.0f,
+	//		(float)(rand() % 1000) / 1000.0f,
+	//		(float)(rand() % 1000) / 1000.0f,
+	//		(float)(rand() % 1000) / 1000.0f
+	//	);*/
+	//	pParticle[i].Col = Desc.ColorMax;
+	//	pParticle[i].Size = 1.0f;
+	//	break;
+	//}
+	//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+	//パーティクルの放出(Set〜で設定した内容を使う)
+	if (emit)
 	{
-		if (pParticle[i].Life > 0.0f)continue;
-		//放出可能なパーティクルに初期設定
-		pParticle[i].Life = (float)(rand() % 30) + 30.0f;	//30~60
-		pParticle[i].StartLife = pParticle[i].Life;
-		pParticle[i].Pos = world;
-		pParticle[i].Vel = XMVectorSet(
-			(float)(rand() % 2000) / 1000.0f - 1.0f,	//-1~+1
-			(float)(rand() % 1000) / 1000.0f,			//0~+1
-			(float)(rand() % 2000) / 1000.0f - 1.0f,	//-1~+1
-			0.0f
-		);
-		pParticle[i].Vel *= 0.1f;
-		/*pParticle[i].Col = XMVectorSet(
-			(float)(rand() % 1000) / 1000.0f,
-			(float)(rand() % 1000) / 1000.0f,
-			(float)(rand() % 1000) / 1000.0f,
-			(float)(rand() % 1000) / 1000.0f
-		);*/
-		pParticle[i].Col = Desc.ColorMax;
-		pParticle[i].Size = 1.0f;
-		break;
+		SpawnParticle(world, Desc.SizeMax, burstSpeed, burstGrowSize, burstFadeAlpha);
 	}
 
 	//カメラのビューマトリクスを取得
@@ -388,8 +398,12 @@ void vnEmitter::execute()
 
 		//描画用頂点座標(ビルボード)
 		XMVECTOR v[4];	//パーティクル周りの基準となる座標
-		float w = pParticle[i].Size;// *overLifeTime;
-		float h = pParticle[i].Size;// *overLifeTime;
+		//GrowSizeがtrueなら寿命にかけて0→Sizeへ徐々に大きくする、falseなら最初からSizeでパッと出す
+		float sizeFactor = pParticle[i].GrowSize ? (1.0f - overLifeTime) : 1.0f;
+		//FadeAlphaがtrueなら寿命にかけて徐々に透明になる、falseなら最初から不透明のまま
+		float alphaFactor = pParticle[i].FadeAlpha ? overLifeTime : 1.0f;
+		float w = pParticle[i].Size * sizeFactor;
+		float h = pParticle[i].Size * sizeFactor;
 		v[0] = XMVectorSet(-w, h, 0.0f, 0.0f);
 		v[1] = XMVectorSet(w, h, 0.0f, 0.0f);
 		v[2] = XMVectorSet(-w, -h, 0.0f, 0.0f);
@@ -414,7 +428,7 @@ void vnEmitter::execute()
 			vtx[renderParticleNum * 4 + j].r = XMVectorGetX(pParticle[i].Col);
 			vtx[renderParticleNum * 4 + j].g = XMVectorGetY(pParticle[i].Col);
 			vtx[renderParticleNum * 4 + j].b = XMVectorGetZ(pParticle[i].Col);
-			vtx[renderParticleNum * 4 + j].a = XMVectorGetW(pParticle[i].Col) * overLifeTime;
+			vtx[renderParticleNum * 4 + j].a = XMVectorGetW(pParticle[i].Col) * alphaFactor;
 		}
 		//インデックスデータの設定
 		idx[IndexNum++] = renderParticleNum * 4 + 0;
@@ -467,4 +481,42 @@ void vnEmitter::setEmit(bool flag)
 bool vnEmitter::isEmit()
 {
 	return emit;
+}
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+//個人で追加
+void vnEmitter::SpawnParticle(const XMVECTOR& worldPos, float size, float speed, bool growSize, bool fadeAlpha)
+{
+	for (int i = 0; i < vnPARTICLE_MAX; i++)
+	{
+		if (pParticle[i].Life > 0.0f)continue;
+		//放出可能なパーティクルに初期設定
+		pParticle[i].Life = (float)(rand() % 10) + 10.0f;	//10~20
+		pParticle[i].StartLife = pParticle[i].Life;
+		pParticle[i].Pos = worldPos;
+		pParticle[i].Vel = XMVectorSet(
+			(float)(rand() % 2000) / 1000.0f - 1.0f,	//-1~+1
+			(float)(rand() % 1000) / 1000.0f,			//0~+1
+			(float)(rand() % 2000) / 1000.0f - 1.0f,	//-1~+1
+			0.0f
+		);
+		pParticle[i].Vel *= speed;
+		pParticle[i].Col = Desc.ColorMax;
+		pParticle[i].Size = size;
+		pParticle[i].GrowSize = growSize;
+		pParticle[i].FadeAlpha = fadeAlpha;
+		return;
+	}
+}
+
+void vnEmitter::setEmit(bool flag, int count)
+{
+	emit = false; //その場でcount個だけバースト生成する(Set〜で設定した内容を使う)
+	if (!flag) return;
+
+	XMVECTOR world;
+	getWorldPosition(&world);
+	for (int i = 0; i < count; i++)
+	{
+		SpawnParticle(world, Desc.SizeMax, burstSpeed, burstGrowSize, burstFadeAlpha);
+	}
 }
