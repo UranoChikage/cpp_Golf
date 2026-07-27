@@ -101,12 +101,12 @@ void PhysicsBody::Step(float deltaTime)
 		{
 			XMVECTOR oNormal = XMLoadFloat3(&o.normal);
 			XMVECTOR combined = XMVector3Normalize(cNormal + oNormal);
-			ApplyBounce(combined);
+			if (ApplyBounce(combined) && OnBounce) OnBounce(pos, combined);
 		}
 	}
 	else if (terrainNew)
 	{
-		ApplyBounce(cNormal);
+		if (ApplyBounce(cNormal) && OnBounce) OnBounce(pos, cNormal);
 	}
 	else if (!obstacle.empty())
 	{
@@ -117,7 +117,7 @@ void PhysicsBody::Step(float deltaTime)
 			if (!o.isTrigger)
 			{
 				XMVECTOR oNormal = XMLoadFloat3(&o.normal);
-				ApplyBounce(oNormal);
+				if (ApplyBounce(oNormal) && OnBounce) OnBounce(pos, oNormal);
 			}
 		}
 	}
@@ -175,7 +175,7 @@ void PhysicsBody::Step(float deltaTime)
 	}
 }
 
-void PhysicsBody::ApplyBounce(const XMVECTOR& normal)
+bool PhysicsBody::ApplyBounce(const XMVECTOR& normal)
 {
 	// 速度を法線方向と接線方向に分解
 	float normalSpeed = MatrixMath::Dot(velocity, normal); // 法線方向の速度
@@ -191,7 +191,9 @@ void PhysicsBody::ApplyBounce(const XMVECTOR& normal)
 			float d = MatrixMath::Dot(velocity, normal);
 			velocity = velocity - normal * d;
 		}
+		return true;
 	}
+	return false;
 }
 
 void PhysicsBody::AddForce(const XMVECTOR& launchDir, ForceMode forceMode)

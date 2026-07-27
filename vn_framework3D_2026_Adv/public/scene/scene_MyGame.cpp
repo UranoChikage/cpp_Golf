@@ -69,6 +69,36 @@ bool SceneMyGame::initialize()
 	//===　ショット操作(DirectionController) ===
 	pShotInput = new ShotInput(pBall, &DirCon);
 
+	//=== パーティクル ===
+	vnEmitter::stEmitterDesc shotDesc;
+	swprintf_s(shotDesc.Texture, L"%s", L"data/image/particle/particle002.png");
+	shotDesc.ColorMax = XMVectorSet(1.0f, 0.9f, 0.4f, 1.0f);
+	pShotEmitter = new vnEmitter(&shotDesc);
+	pShotEmitter->setParent(pBallModel);
+	pShotEmitter->setEmit(false);
+	registerObject(pShotEmitter);
+
+	vnEmitter::stEmitterDesc hitDesc;
+	swprintf_s(hitDesc.Texture, L"%s", L"data/image/particle/particle004.png");
+	hitDesc.ColorMax = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
+	pHitEmitter = new vnEmitter(&hitDesc);
+	pHitEmitter->setParent(pBallModel);
+	pHitEmitter->setEmit(false);
+	registerObject(pHitEmitter);
+
+	//ショットした瞬間にパーティクルをバーストさせる
+	pBall->OnShotAdded = [this](IBall*)
+		{
+			shotEmitTimer = 0.2f;
+			pShotEmitter->setEmit(true);
+		};
+	//地形/障害物にヒットした瞬間にパーティクルをバーストさせる
+	pBall->GetPhysicsBody()->OnBounce = [this](const XMVECTOR&, const XMVECTOR&)
+		{
+			hitEmitTimer = 0.2f;
+			pHitEmitter->setEmit(true);
+		};
+
 	return true;
 }
 //終了
@@ -79,6 +109,8 @@ void SceneMyGame::terminate()
 	deleteObject(pMeshModel);
 	deleteObject(pBallModel);
 	deleteObject(pGroundModel);
+	deleteObject(pShotEmitter);
+	deleteObject(pHitEmitter);
 	delete pTerrainManager;
 	delete pObstacleManager;
 	delete pCamCon;
@@ -115,6 +147,17 @@ void SceneMyGame::execute()
 	vnFont::print(20.0f, 80.0f, L"Power:%.0f%%", pShotInput->GetMeterValue() * 100.0f);
 	vnFont::print(20.0f, 100.0f, L"IsMoving:%d", pBall->GetPhysicsBody()->GetIsMoving());
 
+	//=== パーティクルのバースト時間経過管理 ===
+	if (shotEmitTimer > 0.0f)
+	{
+		shotEmitTimer -= 1.0f / 60.0f;
+		if (shotEmitTimer <= 0.0f) pShotEmitter->setEmit(false);
+	}
+	if (hitEmitTimer > 0.0f)
+	{
+		hitEmitTimer -= 1.0f / 60.0f;
+		if (hitEmitTimer <= 0.0f) pHitEmitter->setEmit(false);
+	}
 
 	vnScene::execute();
 }

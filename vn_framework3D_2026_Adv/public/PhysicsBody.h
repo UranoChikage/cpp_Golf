@@ -44,7 +44,8 @@ private:
 	float timeOutTimer = 0.0f;
 	XMVECTOR prevVelocity = XMVectorZero();
 
-	void ApplyBounce(const XMVECTOR& normal);
+	//実際に速度を反発させた(=normalSpeed<0.0fだった)場合だけtrueを返す
+	bool ApplyBounce(const XMVECTOR& normal);
 
 public:
 	PhysicsBody();
@@ -61,8 +62,11 @@ public:
 
 	float GetVelocityChange() const { return velocityChange; }
 
-	//停止/再開が切り替わったときに呼ばれるコールバック(引数は「止まったかどうか」)
+	//停止/再開が切り替わったときに呼ばれるコールバック
 	std::function<void(bool)> OnIsStoppedChanged;
+
+	//地形/障害物にぶつかって跳ね返った時に呼ばれるコールバック
+	std::function<void(const XMVECTOR&, const XMVECTOR&)> OnBounce;
 
 	//毎フレーム呼び出す物理更新処理(deltaTimeは呼び出し側から渡す)
 	void Step(float deltaTime);
