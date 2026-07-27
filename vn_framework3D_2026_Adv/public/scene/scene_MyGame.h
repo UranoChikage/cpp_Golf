@@ -42,6 +42,10 @@ private:
 
 	void DebugDrawResult(const wchar_t* label, float y,
 		const vnCollide::stSegment& ray, bool result, const XMVECTOR& hit, const XMVECTOR& nor);
+	//MeshColliderの三角形をワイヤーフレームで描画する(コライダーの抜け・ズレ確認用)
+	void DebugDrawMeshCollider(MeshCollider* pCollider, DWORD color);
+	//球コライダーを3平面の円でワイヤーフレーム描画する
+	void DebugDrawSphere(const XMVECTOR& center, float radius, DWORD color);
 
 
 

@@ -21,6 +21,10 @@ XMVECTOR Ball::GetPosition()const
 {
 	return *pb->getPosition();
 }
+float Ball::GetRadius() const
+{
+	return shape->GetRadius();
+}
 void Ball::Shot(const XMVECTOR& dir, float pow)
 {
 	if (!isActive) return;
@@ -38,4 +42,9 @@ void Ball::Deactivate()
 {
 	if (!isActive) return;
 	isActive = false;
+}
+XMVECTOR Ball::GetRotate()const
+{
+	XMVECTOR q = XMQuaternionRotationMatrix(shape->GetRotation());
+	return q;
 }

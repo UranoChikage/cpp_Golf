@@ -4,10 +4,10 @@ class SphereShape : public ICollisionShape
 {
 private:
 	//円の半径
-	float radius = 1.0f;
+	float radius ;
 	//レイキャストパラメーター
-	float rayOriginHeight = 0.1f; // 地形の高さを測るためのレイの開始高さ
-	float rayMaxDistance = 100.0f; // 地形の高さを測るためのレイの最大距離
+	float rayOriginHeight; // 地形の高さを測るためのレイの開始高さ
+	float rayMaxDistance ; // 地形の高さを測るためのレイの最大距離
 	CollisionManager* terrainManager = nullptr; // 地形コライダーを管理してるManager
 	CollisionManager* obstacleManager = nullptr; // 障害物コライダーを管理してるManager
 

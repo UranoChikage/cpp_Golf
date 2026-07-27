@@ -23,6 +23,8 @@ public:
 
 	XMVECTOR GetPosition() const;
 
+	float GetRadius() const;
+
 	PhysicsBody* GetPhysicsBody() const { return pb; }
 
 	bool GetIsActive() const override { return isActive; }
@@ -30,4 +32,5 @@ public:
 	void Shot(const XMVECTOR& dir, float pow);
 
 	void Deactivate() override;
+	XMVECTOR GetRotate()const;
 };

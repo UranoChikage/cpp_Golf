@@ -88,6 +88,7 @@ public:
 		: Triangles(triangles) {
 	}
 	static std::vector<vnCollide::stTriangle> BuildTriangles(vnModel* p);
+	const std::vector<vnCollide::stTriangle>& GetTriangles() const { return Triangles; }
 	bool IsCollide(const vnCollide::stSegment& ray,
 		XMVECTOR* hit, XMVECTOR* nor) override;
 	//2026/07/18　AIに手伝ってもらって追加

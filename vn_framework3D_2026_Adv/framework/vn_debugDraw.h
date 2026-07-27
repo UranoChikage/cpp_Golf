@@ -1,40 +1,40 @@
-//--------------------------------------------------------------//
+ï»¿//--------------------------------------------------------------//
 //	"vn_debugDraw.h"											//
-//		ƒfƒoƒbƒO•`‰æ											//
+//		ãƒ‡ãƒãƒƒã‚°æç”»											//
 //													2026/01/01	//
 //														Ichii	//
 //--------------------------------------------------------------//
 #pragma once
 
-//ƒ|ƒŠƒSƒ“’¸“_\‘¢‘Ì
+//ãƒãƒªã‚´ãƒ³é ‚ç‚¹æ§‹é€ ä½“
 struct vnVertex3D_Line
 {
 	float x,y,z;
 	DWORD color;
 };
 
-//’¸“_”
-#define vnDebugDraw_VertexMax	(1024)
+//é ‚ç‚¹æ•°
+#define vnDebugDraw_VertexMax	(65536)
 
 class vnDebugDraw
 {
 protected:
-	//’¸“_”
+	//é ‚ç‚¹æ•°
 	static int						VertexNum;
-	//’¸“_ƒf[ƒ^
+	//é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿
 	static vnVertex3D_Line			*vtx;
-	//ƒ}ƒgƒŠƒNƒX
+	//ãƒãƒˆãƒªã‚¯ã‚¹
 	static XMFLOAT4X4				*VP;
 
-	//’¸“_ƒoƒbƒtƒ@
+	//é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡
 	static ID3D12Resource* vertBuff;
 	static D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
 
-	static D3D12_INPUT_ELEMENT_DESC inputElementDescs[];	//’¸“_—v‘f
-	static ID3D12PipelineState* pPipelineState;				//ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒg
+	static D3D12_INPUT_ELEMENT_DESC inputElementDescs[];	//é ‚ç‚¹è¦ç´ 
+	static ID3D12PipelineState* pPipelineState;				//ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆ
 
 public:
-	//[ƒVƒXƒeƒ€ŠÇ—ŠÖ”
+	//[ã‚·ã‚¹ãƒ†ãƒ ç®¡ç†é–¢æ•°
 	static bool initialize();
 	static void terminate();
 	static void render();

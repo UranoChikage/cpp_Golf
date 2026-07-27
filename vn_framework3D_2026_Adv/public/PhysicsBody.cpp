@@ -41,11 +41,10 @@ void PhysicsBody::Step(float deltaTime)
 	XMStoreFloat3(&posF3, pos);
 	Contact c = collisionShape->QueryTerrain(&posF3);
 	bool wasGrounded = isGrounded; // 前フレームの接地状態を保存
-	XMVECTOR cNormal = XMVectorZero();
+	XMVECTOR cNormal = XMLoadFloat3(&c.normal);//空中でも球は回転すると思うので
 	if (c.isHit)
 	{
 		isGrounded = true;
-		cNormal = XMLoadFloat3(&c.normal);
 		pos += cNormal * c.penetration;
 	}
 	else

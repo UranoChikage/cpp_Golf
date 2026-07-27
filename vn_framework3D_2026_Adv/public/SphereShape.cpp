@@ -6,6 +6,8 @@ SphereShape::SphereShape(float r, CollisionManager* terrain, CollisionManager* o
 	radius = r;
 	terrainManager = terrain;
 	obstacleManager = obstacle;
+	rayOriginHeight = 5.0f;
+	rayMaxDistance = 100.0f;
 }
 
 Contact SphereShape::QueryTerrain(const XMFLOAT3* pos)
@@ -27,6 +29,11 @@ Contact SphereShape::QueryTerrain(const XMFLOAT3* pos)
 		//接地判定
 		bool hit = penetrationY >= 0;
 		contact.isHit = hit;
+	}
+	else
+	{
+		//2026/07/27：GetHitInfoがfalseの時にnormalをそのまま使うととんでもないことになることに気づいた、のでelseを追加。
+		normal = XMVectorSet(0, 1, 0, 0);
 	}
 
 	XMVECTOR pos_v = XMLoadFloat3(pos);

@@ -6,7 +6,7 @@ ShotInput::ShotInput(Ball* Ball, DirectionController* DirCon)
     ball = Ball;
     dirCon = DirCon;
 
-    maxAimPower = 15.0f;
+    maxAimPower = 30.0f;
     meterSpeed = 1.0f;
 
     aimDirection = dirCon->GetDirection(); // 初期のショット方向を設定
