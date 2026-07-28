@@ -5,6 +5,12 @@
 //初期化
 bool SceneMyGame::initialize()
 {
+	pSky = new vnModel(L"data/model/", L"skydome.vnm");
+	pSky->setRenderFlag(vnObject::eRenderFlag::Lighting, false);	//ライティング無効
+	//シーンの基底クラスへ登録
+	registerObject(pSky);
+
+
 	pTerrainManager = new CollisionManager();
 	pObstacleManager = new CollisionManager();
 
@@ -39,10 +45,10 @@ bool SceneMyGame::initialize()
 	pMeshCollider = new MeshCollider(MeshCollider::BuildTriangles(pMeshModel));
 	pObstacleManager->Add(pMeshCollider);
 
-	//=== でこぼこ ===
+	//=== 床　===
 	pGroundModel = new vnModel(L"data/model/", L"noised_ground.vnm");
-	pGroundModel->setScaleX(2.0f);
-	pGroundModel->setScaleZ(2.0f);
+	pGroundModel->setScaleX(3.0f);
+	pGroundModel->setScaleZ(3.0f);
 	registerObject(pGroundModel);
 	pGroundModel->postExecute(); // World行列を確定させてからTrianglesを構築する
 	//pGroundModel->setRenderEnable(false); // 見た目のメッシュを消してコライダーのワイヤーフレームだけ見たい時はコメントアウトを外す
@@ -90,17 +96,25 @@ bool SceneMyGame::initialize()
 	pHitEmitter->setEmit(false);
 	registerObject(pHitEmitter);
 
-	//ショットした瞬間にパーティクルを1個だけバーストさせる(見た目はSet〜で設定済み)
+	//=== 音 ===
+	pShotSE = new vnSound(L"data/sound/cursor4.wav");
+	pHitSE = new vnSound(L"data/sound/hit.wav");
+
+	//ショットした瞬間にパーティクルとSEを1個だけバーストさせる(見た目はSet〜で設定済み)
 	pBall->OnShotAdded = [this](IBall*)
 		{
 			pShotEmitter->setEmit(true, 1);
+			pShotSE->play();
 		};
-	//地形/障害物にヒットした瞬間にパーティクルをバーストさせる
+	//地形/障害物にヒットした瞬間にパーティクルとSEをバーストさせる
 	pBall->GetPhysicsBody()->OnBounce = [this](const XMVECTOR&, const XMVECTOR&)
 		{
 			hitEmitTimer = 0.1f;
 			pHitEmitter->setEmit(true);
+			pHitSE->play();
 		};
+
+
 
 	return true;
 }
@@ -114,6 +128,10 @@ void SceneMyGame::terminate()
 	deleteObject(pGroundModel);
 	deleteObject(pShotEmitter);
 	deleteObject(pHitEmitter);
+	deleteObject(pSky);
+
+	delete pShotSE;
+	delete pHitSE;
 	delete pTerrainManager;
 	delete pObstacleManager;
 	delete pCamCon;
@@ -127,7 +145,7 @@ void SceneMyGame::execute()
 	vnDebugDraw::Grid();
 	vnDebugDraw::Axis();
 
-	//=== 床(でこぼこ地面)のコライダーを可視化 ===
+	//=== 床のコライダーを可視化 ===
 	//DebugDrawMeshCollider(pGroundCollider, 0xff00ffff); // 黄色：地面のMeshCollider
 
 	//=== Ball===

@@ -23,7 +23,9 @@ private:
 	vnModel* pBallModel; // ボールの見た目用
 	XMVECTOR ballPos; // カメラのターゲットとしてアドレスを渡し続けるためメンバで持つ
 
-	//=== 地形(でこぼこ道) ===
+	//=== 空 ===
+	vnModel* pSky;
+	//=== 床 ===
 	vnModel* pGroundModel;
 	MeshCollider* pGroundCollider;
 
@@ -32,7 +34,9 @@ private:
 	vnEmitter* pHitEmitter; // 地形/障害物にヒットした瞬間に出す
 	float hitEmitTimer = 0.0f; // 0より大きい間だけemitし続ける(バースト表現用)
 
-
+	//=== 音 ===
+	vnSound* pShotSE;// ショットした瞬間に出す
+	vnSound* pHitSE;// 地形/障害物にヒットした瞬間に出す
 
 	//=== 方向管理(マウス操作) ===
 	DirectionController DirCon;
